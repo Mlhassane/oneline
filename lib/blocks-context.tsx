@@ -2,6 +2,13 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react"
 import { useAuth } from "./auth-context"
+import {
+    getBlocks,
+    addBlockAction,
+    updateBlockAction,
+    deleteBlockAction,
+    reorderBlocksAction
+} from "./actions/blocks"
 
 export interface BentoBlock {
     id: string
@@ -17,45 +24,14 @@ export interface BentoBlock {
 
 interface BlocksContextType {
     blocks: BentoBlock[]
-    addBlock: (type: BentoBlock["type"]) => void
-    updateBlock: (id: string, data: Partial<BentoBlock>) => void
-    deleteBlock: (id: string) => void
-    setBlocks: (blocks: BentoBlock[]) => void
+    addBlock: (type: BentoBlock["type"]) => Promise<void>
+    updateBlock: (id: string, data: Partial<BentoBlock>) => Promise<void>
+    deleteBlock: (id: string) => Promise<void>
+    setBlocks: (blocks: BentoBlock[]) => Promise<void>
     isLoading: boolean
 }
 
 const BlocksContext = createContext<BlocksContextType | undefined>(undefined)
-
-const BLOCKS_STORAGE_PREFIX = "bento_blocks_"
-
-const defaultBlocks: BentoBlock[] = [
-    {
-        id: "1",
-        type: "social",
-        title: "Instagram",
-        url: "https://instagram.com",
-        color: "bg-gradient-to-br from-pink-500 to-orange-500",
-        size: "small",
-        social: "instagram",
-    },
-    {
-        id: "2",
-        type: "social",
-        title: "Twitter",
-        url: "https://twitter.com",
-        color: "bg-sky-500",
-        size: "small",
-        social: "twitter",
-    },
-    {
-        id: "3",
-        type: "text",
-        title: "About Me",
-        content: "Creator, designer, and dreamer. Building beautiful things on the internet.",
-        color: "bg-bento-green/20",
-        size: "large",
-    },
-]
 
 export function BlocksProvider({ children }: { children: ReactNode }) {
     const { user } = useAuth()
@@ -63,50 +39,55 @@ export function BlocksProvider({ children }: { children: ReactNode }) {
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        if (user) {
-            const stored = localStorage.getItem(`${BLOCKS_STORAGE_PREFIX}${user.id}`)
-            if (stored) {
-                try {
-                    setBlocksState(JSON.parse(stored))
-                } catch (e) {
-                    console.error("Failed to parse blocks", e)
-                    setBlocksState(defaultBlocks)
-                }
+        async function fetchBlocks() {
+            if (user?.id) {
+                const data = await getBlocks(user.id)
+                setBlocksState(data as BentoBlock[])
             } else {
-                setBlocksState(defaultBlocks)
+                setBlocksState([])
             }
-        } else {
-            setBlocksState([])
+            setIsLoading(false)
         }
-        setIsLoading(false)
-    }, [user])
 
-    const saveBlocks = (newBlocks: BentoBlock[]) => {
-        if (user) {
-            localStorage.setItem(`${BLOCKS_STORAGE_PREFIX}${user.id}`, JSON.stringify(newBlocks))
+        fetchBlocks()
+    }, [user?.id])
+
+    const addBlock = async (type: BentoBlock["type"]) => {
+        if (!user) return
+
+        const newBlock = await addBlockAction(user.id, type)
+        if (newBlock) {
+            setBlocksState([...blocks, newBlock as any])
         }
+    }
+
+    const updateBlock = async (id: string, data: Partial<BentoBlock>) => {
+        // Optimistic UI update
+        const previousBlocks = [...blocks]
+        setBlocksState(blocks.map((b) => (b.id === id ? { ...b, ...data } : b)))
+
+        const success = await updateBlockAction(id, data)
+        if (!success) {
+            setBlocksState(previousBlocks)
+        }
+    }
+
+    const deleteBlock = async (id: string) => {
+        // Optimistic UI update
+        const previousBlocks = [...blocks]
+        setBlocksState(blocks.filter((b) => b.id !== id))
+
+        const success = await deleteBlockAction(id)
+        if (!success) {
+            setBlocksState(previousBlocks)
+        }
+    }
+
+    const setBlocks = async (newBlocks: BentoBlock[]) => {
         setBlocksState(newBlocks)
-    }
-
-    const addBlock = (type: BentoBlock["type"]) => {
-        const newBlock: BentoBlock = {
-            id: crypto.randomUUID(),
-            type,
-            title: `New ${type}`,
-            color: "bg-card",
-            size: "medium",
+        if (user) {
+            await reorderBlocksAction(user.id, newBlocks.map(b => b.id))
         }
-        saveBlocks([...blocks, newBlock])
-    }
-
-    const updateBlock = (id: string, data: Partial<BentoBlock>) => {
-        const newBlocks = blocks.map((b) => (b.id === id ? { ...b, ...data } : b))
-        saveBlocks(newBlocks)
-    }
-
-    const deleteBlock = (id: string) => {
-        const newBlocks = blocks.filter((b) => b.id !== id)
-        saveBlocks(newBlocks)
     }
 
     return (
@@ -116,7 +97,7 @@ export function BlocksProvider({ children }: { children: ReactNode }) {
                 addBlock,
                 updateBlock,
                 deleteBlock,
-                setBlocks: saveBlocks,
+                setBlocks,
                 isLoading,
             }}
         >

@@ -2,6 +2,8 @@ import React from "react"
 import type { Metadata } from 'next'
 import { DM_Sans } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { ClerkProvider } from '@clerk/nextjs'
+import { Toaster } from "@/components/ui/sonner"
 import './globals.css'
 
 const _dmSans = DM_Sans({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800", "900"] });
@@ -35,11 +37,14 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={`font-sans antialiased`}>
-        {children}
-        <Analytics />
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body className={`${_dmSans.className} antialiased`}>
+          {children}
+          <Toaster position="top-right" richColors />
+        </body>
+      </html>
+    </ClerkProvider>
   )
 }
+

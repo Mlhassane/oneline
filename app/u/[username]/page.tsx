@@ -17,6 +17,7 @@ import {
     Music2
 } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { getPublicProfile } from "@/lib/actions/public"
 
 interface BentoBlockType {
     id: string
@@ -31,9 +32,10 @@ interface BentoBlockType {
 
 interface UserData {
     id: string
-    name: string
+    name: string | null
     username: string
-    bio?: string
+    bio?: string | null
+    image?: string | null
 }
 
 const socialIcons: Record<string, any> = {
@@ -66,34 +68,16 @@ export default function PublicProfilePage({ params }: { params: { username: stri
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        const fetchUserData = () => {
-            const usersKey = "bento_users"
-            const storedUsers = localStorage.getItem(usersKey)
-            
-            if (storedUsers) {
-                try {
-                    const usersMap = JSON.parse(storedUsers)
-                    const userEntry = Object.values(usersMap).find(
-                        (entry: any) => entry.user.username.toLowerCase() === username.toLowerCase()
-                    ) as any
-
-                    if (userEntry) {
-                        setUser(userEntry.user)
-                        
-                        const blocksKey = `bento_blocks_${userEntry.user.id}`
-                        const storedBlocks = localStorage.getItem(blocksKey)
-                        if (storedBlocks) {
-                            setBlocks(JSON.parse(storedBlocks))
-                        }
-                    }
-                } catch (e) {
-                    console.error("Failed to parse local storage", e)
-                }
+        async function fetchData() {
+            const data = await getPublicProfile(username)
+            if (data) {
+                setUser(data.user)
+                setBlocks(data.blocks)
             }
             setIsLoading(false)
         }
 
-        fetchUserData()
+        fetchData()
     }, [username])
 
     if (isLoading) {
@@ -114,9 +98,17 @@ export default function PublicProfilePage({ params }: { params: { username: stri
                 {/* Profile Header */}
                 <div className="text-center pt-8">
                     <div className="inline-block mb-6">
-                        <div className="w-28 h-28 rounded-full bg-linear-to-br from-bento-green to-bento-blue flex items-center justify-center text-background text-4xl font-black shadow-2xl ring-4 ring-background">
-                            {user.name[0]?.toUpperCase()}
-                        </div>
+                        {user.image ? (
+                            <img
+                                src={user.image}
+                                alt={user.name || ""}
+                                className="w-28 h-28 rounded-full shadow-2xl ring-4 ring-background object-cover"
+                            />
+                        ) : (
+                            <div className="w-28 h-28 rounded-full bg-linear-to-br from-bento-green to-bento-blue flex items-center justify-center text-background text-4xl font-black shadow-2xl ring-4 ring-background">
+                                {user.name?.[0]?.toUpperCase() || "O"}
+                            </div>
+                        )}
                     </div>
                     <h1 className="text-3xl font-black text-foreground mb-2 tracking-tight">{user.name}</h1>
                     <p className="text-muted-foreground font-medium mb-4">@{user.username}</p>
@@ -185,14 +177,14 @@ export default function PublicProfilePage({ params }: { params: { username: stri
                                                     </div>
                                                 )}
                                                 {block.type === "image" && (
-                                                  <div className="w-8 h-8 rounded-full bg-bento-pink/20 flex items-center justify-center border border-bento-pink/10">
-                                                    <ImageIcon className="w-4 h-4 text-bento-pink" />
-                                                  </div>
+                                                    <div className="w-8 h-8 rounded-full bg-bento-pink/20 flex items-center justify-center border border-bento-pink/10">
+                                                        <ImageIcon className="w-4 h-4 text-bento-pink" />
+                                                    </div>
                                                 )}
                                                 {block.type === "social" && block.social === "drive" && SocialIcon && (
-                                                  <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center border border-white/10">
-                                                    <SocialIcon className="w-4 h-4 text-white" />
-                                                  </div>
+                                                    <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center border border-white/10">
+                                                        <SocialIcon className="w-4 h-4 text-white" />
+                                                    </div>
                                                 )}
                                             </div>
                                         </>
@@ -214,11 +206,7 @@ export default function PublicProfilePage({ params }: { params: { username: stri
                         </div>
                     </a>
                 </div>
-
-
             </div>
         </div>
     )
 }
-
-

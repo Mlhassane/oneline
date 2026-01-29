@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
 import { User, Mail, AtSign, FileText } from "lucide-react"
+import { updateUserAction } from "@/lib/actions/user"
 
 export default function SettingsPage() {
     const { user, updateUser } = useAuth()
@@ -17,18 +18,25 @@ export default function SettingsPage() {
     const [isSaving, setIsSaving] = useState(false)
 
     const handleSave = async () => {
+        if (!user) return
         setIsSaving(true)
         try {
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 1000))
-
-            updateUser({
+            const result = await updateUserAction(user.id, {
                 name,
                 username: username.toLowerCase(),
                 bio
             })
 
-            toast.success("Profile updated successfully")
+            if (result.success && result.user) {
+                updateUser({
+                    name: result.user.name || "",
+                    username: result.user.username,
+                    bio: result.user.bio || ""
+                })
+                toast.success("Profile updated successfully")
+            } else {
+                toast.error(result.error || "Failed to update profile")
+            }
         } catch (error) {
             toast.error("Failed to update profile")
         } finally {
