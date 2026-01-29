@@ -10,11 +10,11 @@ export async function getBlocks(userId: string) {
             orderBy: { position: "asc" },
         })
 
-        return blocks.map(b => ({
+        return blocks.map((b: any) => ({
             ...b,
             size: b.size as BentoBlock["size"],
             type: b.type as BentoBlock["type"],
-            social: b.social as BentoBlock["social"] || undefined,
+            social: b.social as BentoBlock["social"] || null,
         }))
     } catch (error) {
         console.error("Failed to get blocks:", error)

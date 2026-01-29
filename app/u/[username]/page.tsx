@@ -23,11 +23,11 @@ interface BentoBlockType {
     id: string
     type: "link" | "text" | "image" | "video" | "music" | "map" | "social"
     title: string
-    content?: string
-    url?: string
-    color?: string
+    content?: string | null
+    url?: string | null
+    color?: string | null
     size: "small" | "medium" | "large"
-    social?: "instagram" | "twitter" | "youtube" | "github" | "facebook" | "linkedin" | "drive" | "spotify" | "tiktok"
+    social?: "instagram" | "twitter" | "youtube" | "github" | "facebook" | "linkedin" | "drive" | "spotify" | "tiktok" | null
 }
 
 interface UserData {
