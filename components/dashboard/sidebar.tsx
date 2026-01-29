@@ -37,12 +37,13 @@ export function DashboardSidebar() {
           <div className="relative">
             <div className="absolute inset-0 bg-bento-green rounded-lg blur-md opacity-50 group-hover:opacity-80 transition-opacity" />
             <div className="relative w-8 h-8 bg-gradient-to-br from-bento-green to-bento-blue rounded-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110">
-              <span className="text-background font-black text-sm">B</span>
+              <span className="text-background font-black text-sm">O</span>
             </div>
           </div>
-          <span className="text-lg font-bold text-foreground">Bento</span>
+          <span className="text-lg font-bold text-foreground">Onene</span>
         </Link>
       </div>
+
 
       {/* Add Block Button */}
       <div className="p-4">
@@ -87,8 +88,9 @@ export function DashboardSidebar() {
         >
           <div className="flex items-center gap-3">
             <Eye className="w-4 h-4 text-muted-foreground" />
-            <span className="text-sm text-muted-foreground">bento.me/{user?.username}</span>
+            <span className="text-sm text-muted-foreground">onene.me/{user?.username}</span>
           </div>
+
           <ExternalLink className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
         </a>
       </div>

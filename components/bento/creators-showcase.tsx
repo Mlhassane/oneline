@@ -55,7 +55,7 @@ export function CreatorsShowcase() {
           href="#"
           className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
         >
-          <span className="text-sm font-medium">Explore the most creative Bentos</span>
+          <span className="text-sm font-medium">Explore the most creative Onene pages</span>
           <svg
             className="w-4 h-4"
             fill="none"

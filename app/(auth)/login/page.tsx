@@ -46,10 +46,10 @@ export default function LoginPage() {
             <div className="relative">
               <div className="absolute inset-0 bg-bento-green rounded-xl blur-md opacity-50 group-hover:opacity-80 transition-opacity" />
               <div className="relative w-10 h-10 bg-gradient-to-br from-bento-green to-bento-blue rounded-xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:rotate-12">
-                <span className="text-background font-black text-lg">B</span>
+                <span className="text-background font-black text-lg">O</span>
               </div>
             </div>
-            <span className="text-2xl font-bold text-foreground">Bento</span>
+            <span className="text-2xl font-bold text-foreground">Onene</span>
           </Link>
 
           {/* Header */}
@@ -227,7 +227,7 @@ export default function LoginPage() {
               Your personal corner of the internet
             </h2>
             <p className="text-muted-foreground text-lg">
-              Share everything you create, curate and sell from your Bento page.
+              Share everything you create, curate and sell from your Onene page.
             </p>
           </div>
         </div>

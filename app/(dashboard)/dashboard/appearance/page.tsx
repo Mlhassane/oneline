@@ -9,7 +9,7 @@ const themes = [
     {
         id: "modern",
         name: "Modern Dark",
-        description: "The classic Bento look with deep grays and vibrant accents.",
+        description: "The classic Onene look with deep grays and vibrant accents.",
         colors: ["bg-[#0A0A0A]", "bg-bento-green", "bg-bento-blue"],
         active: true
     },

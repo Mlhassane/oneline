@@ -34,7 +34,7 @@ export function Navbar() {
       >
         {/* Glowing background effect */}
         <div className="absolute inset-0 rounded-[28px] bg-linear-to-r from-bento-green/20 via-bento-blue/20 to-bento-pink/20 blur-xl opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-        
+
         {/* Main navbar container with glass effect */}
         <div
           className={cn(
@@ -46,24 +46,25 @@ export function Navbar() {
         >
           {/* Inner glow effect */}
           <div className="absolute inset-[1px] rounded-[27px] bg-gradient-to-b from-white/[0.08] to-transparent pointer-events-none" />
-          
+
           {/* Animated border gradient */}
           <div className="absolute inset-0 rounded-[28px] overflow-hidden pointer-events-none">
             <div className="absolute inset-[-100%] bg-[conic-gradient(from_0deg,transparent,transparent_40%,var(--bento-green)_50%,transparent_60%,transparent)] animate-spin-slow opacity-30" style={{ animationDuration: '8s' }} />
           </div>
-          
+
           <div className="relative px-4 md:px-6 py-3 flex items-center justify-between">
             {/* Logo */}
             <a href="/" className="flex items-center gap-2.5 group">
               <div className="relative">
                 <div className="absolute inset-0 bg-bento-green rounded-xl blur-md opacity-50 group-hover:opacity-80 transition-opacity" />
-                <div className="relative w-9 h-9 bg-gradient-to-br from-bento-green to-bento-blue rounded-xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:rotate-12 group-hover:shadow-lg group-hover:shadow-bento-green/40">
+                <div className="relative w-9 h-9 bg-linear-to-br from-bento-green to-bento-blue rounded-xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:rotate-12 group-hover:shadow-lg group-hover:shadow-bento-green/40">
                   <span className="text-background font-black text-base">O</span>
                 </div>
               </div>
               <span className="text-xl font-bold text-foreground transition-all duration-300 group-hover:text-bento-green group-hover:tracking-wide">
-                Oneli.ne
+                Onene
               </span>
+
             </a>
 
             {/* Desktop Navigation - Center pill */}

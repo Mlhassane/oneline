@@ -83,13 +83,13 @@ export default function SignupPage() {
               Create something beautiful
             </h2>
             <p className="text-muted-foreground text-lg mb-8">
-              Join thousands of creators sharing their world through Bento.
+              Join thousands of creators sharing their world through Onene.
             </p>
 
             {/* Testimonial */}
             <div className="bg-background/50 backdrop-blur-sm rounded-2xl p-6 border border-border">
               <p className="text-foreground italic mb-4">
-                {"\"Bento changed how I share my work. It's simple, beautiful, and my audience loves it.\""}
+                {"\"Onene changed how I share my work. It's simple, beautiful, and my audience loves it.\""}
               </p>
               <div className="flex items-center justify-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-bento-green flex items-center justify-center text-background font-bold">
@@ -113,10 +113,10 @@ export default function SignupPage() {
             <div className="relative">
               <div className="absolute inset-0 bg-bento-green rounded-xl blur-md opacity-50 group-hover:opacity-80 transition-opacity" />
               <div className="relative w-10 h-10 bg-gradient-to-br from-bento-green to-bento-blue rounded-xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:rotate-12">
-                <span className="text-background font-black text-lg">B</span>
+                <span className="text-background font-black text-lg">O</span>
               </div>
             </div>
-            <span className="text-2xl font-bold text-foreground">Bento</span>
+            <span className="text-2xl font-bold text-foreground">Onene</span>
           </Link>
 
           {/* Header */}
@@ -125,7 +125,7 @@ export default function SignupPage() {
               Create your account
             </h1>
             <p className="text-muted-foreground">
-              Start building your beautiful Bento page today
+              Start building your beautiful Onene page today
             </p>
           </div>
 

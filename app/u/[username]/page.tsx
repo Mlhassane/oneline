@@ -209,11 +209,13 @@ export default function PublicProfilePage({ params }: { params: { username: stri
                     <a href="/" className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-secondary/30 text-xs font-bold text-muted-foreground hover:bg-secondary/50 hover:text-foreground transition-all border border-border/50">
                         <span>Created with</span>
                         <div className="flex items-center gap-1.5">
-                            <div className="w-5 h-5 rounded-md bg-linear-to-br from-bento-green to-bento-blue flex items-center justify-center text-[10px] text-white font-black">B</div>
-                            <span className="font-black text-foreground tracking-tighter text-sm">Oneline</span>
+                            <div className="w-5 h-5 rounded-md bg-linear-to-br from-bento-green to-bento-blue flex items-center justify-center text-[10px] text-white font-black">O</div>
+                            <span className="font-black text-foreground tracking-tighter text-sm">Onene</span>
                         </div>
                     </a>
                 </div>
+
+
             </div>
         </div>
     )

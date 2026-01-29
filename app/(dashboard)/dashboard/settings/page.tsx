@@ -93,7 +93,7 @@ export default function SettingsPage() {
                                         />
                                     </div>
                                     <p className="text-[10px] text-muted-foreground ml-1">
-                                        This will change your profile URL: bento.me/{username || "username"}
+                                        This will change your profile URL: onene.me/{username || "username"}
                                     </p>
                                 </div>
 

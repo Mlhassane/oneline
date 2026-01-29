@@ -7,7 +7,7 @@ import './globals.css'
 const _dmSans = DM_Sans({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800", "900"] });
 
 export const metadata: Metadata = {
-  title: 'Bento - A Link in Bio, but Rich and Beautiful',
+  title: 'Oneline - A Link in Bio, but Rich and Beautiful',
   description: 'All your links and content on one beautiful page. Show your audience everything you are, create and sell in one place.',
   generator: 'v0.app',
   icons: {
