@@ -145,7 +145,7 @@ export default function PublicProfilePage({ params }: { params: Promise<{ userna
                         const SocialIcon = block.social ? socialIcons[block.social] : null
                         const isSocial = block.type === "social" && block.social
                         const socialColorClass = isSocial && block.social ? socialColors[block.social] : ""
-                        
+
                         return (
                             <a
                                 key={block.id}
@@ -160,6 +160,18 @@ export default function PublicProfilePage({ params }: { params: Promise<{ userna
                                     !isSocial && "bg-card border border-border"
                                 )}
                             >
+                                {/* Image Background for Image Type Blocks */}
+                                {block.type === "image" && block.url && (
+                                    <div className="absolute inset-0 z-0">
+                                        <img
+                                            src={block.url}
+                                            alt={block.title || ""}
+                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                        />
+                                        <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-500" />
+                                    </div>
+                                )}
+
                                 <div className="h-full flex flex-col justify-between relative z-10">
                                     {/* Social Block Layout */}
                                     {isSocial && SocialIcon ? (
@@ -175,7 +187,7 @@ export default function PublicProfilePage({ params }: { params: Promise<{ userna
                                                     </svg>
                                                 </div>
                                             </div>
-                                            
+
                                             <div className="mt-auto">
                                                 {block.username && (
                                                     <p className="text-[11px] font-bold text-white/90 mb-0.5 tracking-wide">
@@ -195,11 +207,11 @@ export default function PublicProfilePage({ params }: { params: Promise<{ userna
                                             <div className="flex items-start justify-between">
                                                 <div className={cn(
                                                     "w-10 h-10 rounded-2xl flex items-center justify-center transition-colors",
-                                                    block.color ? "bg-white/20" : "bg-secondary group-hover:bg-secondary/80"
+                                                    (block.color || block.type === "image") ? "bg-white/20" : "bg-secondary group-hover:bg-secondary/80"
                                                 )}>
                                                     {block.type === "link" && <Link2 className={cn("w-5 h-5", block.color ? "text-white" : "text-foreground")} />}
                                                     {block.type === "map" && <MapPin className={cn("w-5 h-5", block.color ? "text-white" : "text-foreground")} />}
-                                                    {block.type === "image" && <ImageIcon className={cn("w-5 h-5", block.color ? "text-white" : "text-foreground")} />}
+                                                    {block.type === "image" && <ImageIcon className="w-5 h-5 text-white" />}
                                                     {block.type === "music" && <Music2 className={cn("w-5 h-5", block.color ? "text-white" : "text-foreground")} />}
                                                 </div>
                                             </div>
@@ -208,7 +220,7 @@ export default function PublicProfilePage({ params }: { params: Promise<{ userna
                                                 {block.title && (
                                                     <h3 className={cn(
                                                         "font-bold text-sm tracking-tight transition-colors line-clamp-1",
-                                                        block.color ? "text-white" : "text-foreground group-hover:text-bento-green"
+                                                        (block.color || block.type === "image") ? "text-white" : "text-foreground group-hover:text-bento-green"
                                                     )}>
                                                         {block.title}
                                                     </h3>
@@ -216,7 +228,7 @@ export default function PublicProfilePage({ params }: { params: Promise<{ userna
                                                 {block.content && (
                                                     <p className={cn(
                                                         "text-[11px] leading-relaxed line-clamp-2 font-medium",
-                                                        block.color ? "text-white/70" : "text-muted-foreground"
+                                                        (block.color || block.type === "image") ? "text-white/90" : "text-muted-foreground"
                                                     )}>
                                                         {block.content}
                                                     </p>
@@ -225,7 +237,7 @@ export default function PublicProfilePage({ params }: { params: Promise<{ userna
                                         </>
                                     )}
                                 </div>
-                                
+
                                 {/* Hover Effect Overlay */}
                                 {!isSocial && (
                                     <div className="absolute inset-0 bg-linear-to-t from-background/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />

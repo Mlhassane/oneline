@@ -28,6 +28,8 @@ import {
   Send,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { toast } from "sonner"
+
 import { useBlocks, type BentoBlock } from "@/lib/blocks-context"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -40,6 +42,9 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { detectPlatform } from "@/lib/platform-detector"
+import { uploadImageAction } from "@/lib/actions/upload"
+import { Loader2, Upload } from "lucide-react"
+
 
 
 import {
@@ -166,6 +171,18 @@ function SortableBlock({
       onMouseEnter={() => onHover(block.id)}
       onMouseLeave={() => onHover(null)}
     >
+      {/* Image Background for Image Type Blocks */}
+      {block.type === "image" && block.url && (
+        <div className="absolute inset-0 z-0 overflow-hidden rounded-4xl">
+          <img
+            src={block.url}
+            alt={block.title || ""}
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          />
+          <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-500" />
+        </div>
+      )}
+
       {/* Actions Overlay */}
       <div
         className={cn(
@@ -221,12 +238,18 @@ function SortableBlock({
           <>
             <div>
               {block.title && (
-                <h3 className="font-bold text-foreground text-sm mb-1.5 tracking-tight">
+                <h3 className={cn(
+                  "font-bold text-sm mb-1.5 tracking-tight",
+                  block.type === "image" ? "text-white" : "text-foreground"
+                )}>
                   {block.title}
                 </h3>
               )}
               {block.content && (
-                <p className="text-[11px] text-muted-foreground leading-relaxed line-clamp-3 font-medium opacity-80">
+                <p className={cn(
+                  "text-[11px] leading-relaxed line-clamp-3 font-medium opacity-80",
+                  block.type === "image" ? "text-white/90" : "text-muted-foreground"
+                )}>
                   {block.content}
                 </p>
               )}
@@ -254,8 +277,15 @@ function SortableBlock({
                 </div>
               )}
               {block.type === "image" && (
-                <div className="w-8 h-8 rounded-full bg-bento-pink/20 flex items-center justify-center border border-bento-pink/10">
-                  <ImageIcon className="w-4 h-4 text-bento-pink" />
+                <div className={cn(
+                  "w-8 h-8 rounded-full flex items-center justify-center border overflow-hidden",
+                  block.url ? "bg-white/20 border-white/10" : "bg-bento-pink/20 border-bento-pink/10"
+                )}>
+                  {block.url ? (
+                    <img src={block.url} alt="" className="w-full h-full object-cover" />
+                  ) : (
+                    <ImageIcon className="w-4 h-4 text-bento-pink" />
+                  )}
                 </div>
               )}
               {block.type === "social" && block.social === "drive" && SocialIcon && (
@@ -276,6 +306,7 @@ export function BentoEditor() {
   const { blocks, addBlock, updateBlock, deleteBlock, setBlocks } = useBlocks()
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null)
   const [hoveredBlockId, setHoveredBlockId] = useState<string | null>(null)
+  const [isUploading, setIsUploading] = useState(false)
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -323,6 +354,28 @@ export function BentoEditor() {
     // cols peut être 1, 2, ou 4
     // rows peut être 1 ou 2
     return `col-span-${cols} row-span-${rows}`
+  }
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!selectedBlockId || !e.target.files?.[0]) return
+
+    setIsUploading(true)
+    const formData = new FormData()
+    formData.append("file", e.target.files[0])
+
+    try {
+      const result = await uploadImageAction(formData)
+      if (result.success && result.url) {
+        updateBlock(selectedBlockId, { url: result.url })
+        toast.success("Image uploaded successfully")
+      } else {
+        toast.error(result.error || "Failed to upload image")
+      }
+    } catch (error) {
+      toast.error("An error occurred during upload")
+    } finally {
+      setIsUploading(false)
+    }
   }
 
   return (
@@ -465,15 +518,57 @@ export function BentoEditor() {
                 />
               </div>
 
-              {(selectedBlock.type === "text" || selectedBlock.type === "music" || selectedBlock.type === "map") && (
+              {(selectedBlock.type === "text" || selectedBlock.type === "music" || selectedBlock.type === "map" || selectedBlock.type === "image") && (
                 <div className="space-y-2.5">
-                  <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground px-1">Content / Description</Label>
+                  <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground px-1">
+                    {selectedBlock.type === "image" ? "Comment / Description" : "Content / Description"}
+                  </Label>
                   <Textarea
                     value={selectedBlock.content || ""}
                     onChange={(e) => updateBlock(selectedBlock.id, { content: e.target.value })}
-                    placeholder="Enter description..."
+                    placeholder={selectedBlock.type === "image" ? "Add a small comment..." : "Enter description..."}
                     className="rounded-2xl bg-secondary/50 border-none focus-visible:ring-2 focus-visible:ring-bento-green min-h-[100px] p-4 font-medium leading-relaxed"
                   />
+                </div>
+              )}
+
+              {selectedBlock.type === "image" && (
+                <div className="space-y-4 pt-2">
+                  <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground px-1">Image Block Link</Label>
+                  <Input
+                    value={selectedBlock.url || ""}
+                    onChange={(e) => updateBlock(selectedBlock.id, { url: e.target.value })}
+                    placeholder="https://... (Optional link for the image)"
+                    className="rounded-2xl bg-secondary/50 border-none focus-visible:ring-2 focus-visible:ring-bento-green h-12 px-4 font-medium"
+                  />
+
+                  <div className="pt-2">
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground px-1 mb-2 block">Change Image</Label>
+                    <div className="relative group/upload">
+                      <input
+                        type="file"
+                        onChange={handleImageUpload}
+                        accept="image/*"
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                        disabled={isUploading}
+                      />
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        disabled={isUploading}
+                        className="w-full rounded-2xl h-14 border border-dashed border-border group-hover/upload:border-bento-green/50 transition-all flex items-center justify-center gap-2"
+                      >
+                        {isUploading ? (
+                          <Loader2 className="w-5 h-5 animate-spin text-bento-green" />
+                        ) : (
+                          <Upload className="w-5 h-5 text-muted-foreground group-hover/upload:text-bento-green" />
+                        )}
+                        <span className="text-xs font-bold uppercase tracking-widest">
+                          {isUploading ? "Uploading..." : "Upload New Image"}
+                        </span>
+                      </Button>
+                    </div>
+                  </div>
                 </div>
               )}
 
