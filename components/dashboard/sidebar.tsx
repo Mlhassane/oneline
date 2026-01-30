@@ -16,10 +16,11 @@ import {
   ExternalLink,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { ThemeToggle } from "@/components/theme-toggle"
+import { LanguageToggle } from "@/components/language-toggle"
 
 const navItems = [
   { label: "Editor", href: "/dashboard", icon: LayoutGrid },
-  { label: "Links", href: "/dashboard/links", icon: Link2 },
   { label: "Appearance", href: "/dashboard/appearance", icon: Palette },
   { label: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
   { label: "Settings", href: "/dashboard/settings", icon: Settings },
@@ -105,6 +106,10 @@ export function DashboardSidebar() {
             <p className="text-sm font-medium text-foreground truncate">{user?.name}</p>
             <p className="text-xs text-muted-foreground truncate">@{user?.username}</p>
           </div>
+        </div>
+        <div className="mb-3 flex justify-center gap-2">
+          <LanguageToggle />
+          <ThemeToggle />
         </div>
         <button
           type="button"

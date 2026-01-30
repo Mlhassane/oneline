@@ -15,10 +15,12 @@ export interface BentoBlock {
     type: "link" | "text" | "image" | "video" | "music" | "map" | "social"
     title: string
     content?: string | null
+    username?: string | null
     url?: string | null
     color?: string | null
-    size: "small" | "medium" | "large"
-    social?: "instagram" | "twitter" | "youtube" | "github" | "facebook" | "linkedin" | "drive" | "spotify" | "tiktok" | null
+    cols: 1 | 2 | 4
+    rows: 1 | 2
+    social?: "instagram" | "twitter" | "youtube" | "github" | "facebook" | "linkedin" | "drive" | "spotify" | "tiktok" | "twitch" | "email" | "telegram" | "whatsapp" | "reddit" | "discord" | "snapchat" | "pinterest" | "medium" | "threads" | "bluesky" | "patreon" | "onlyfans" | "soundcloud" | "deviantart" | "vimeo" | "substack" | "kofi" | "mastodon" | null
 }
 
 

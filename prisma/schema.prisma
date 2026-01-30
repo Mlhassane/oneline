@@ -8,32 +8,54 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  clerkId   String   @unique
-  email     String   @unique
-  username  String   @unique
+  id        String      @id @default(cuid())
+  clerkId   String      @unique
+  email     String      @unique
+  username  String      @unique
   name      String?
   bio       String?
   image     String?
   blocks    Block[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  visits    PageVisit[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
 }
 
 model Block {
+  id        String       @id @default(cuid())
+  userId    String
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String // link, text, social, etc.
+  title     String
+  content   String?
+  username  String? // Pour le pseudo social
+  url       String?
+  color     String?
+  cols      Int          @default(2) // 1, 2, ou 4 colonnes
+  rows      Int          @default(1) // 1 ou 2 lignes
+  social    String? // instagram, youtube, etc.
+  position  Int          @default(0)
+  clicks    BlockClick[]
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  @@index([userId])
+}
+
+model PageVisit {
   id        String   @id @default(cuid())
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  type      String   // link, text, social, etc.
-  title     String
-  content   String?
-  url       String?
-  color     String?
-  size      String   @default("medium") // small, medium, large
-  social    String?  // instagram, youtube, etc.
-  position  Int      @default(0)
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 
   @@index([userId])
+}
+
+model BlockClick {
+  id        String   @id @default(cuid())
+  blockId   String
+  block     Block    @relation(fields: [blockId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([blockId])
 }

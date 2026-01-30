@@ -74,7 +74,7 @@ export function FreeSection() {
                   <ChevronLeft className="w-5 h-5" />
                 </button>
 
-                <span className="text-xl md:text-3xl font-bold text-muted-foreground">bento.me/</span>
+                <span className="text-xl md:text-3xl font-bold text-muted-foreground">oneli.ne/</span>
                 
                 {/* Name slider */}
                 <div className="relative w-32 md:w-44 h-10 md:h-12 overflow-hidden">

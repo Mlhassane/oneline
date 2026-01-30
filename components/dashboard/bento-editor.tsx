@@ -23,6 +23,9 @@ import {
   HardDrive,
   Disc,
   Music2,
+  Mail,
+  Twitch,
+  Send,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useBlocks, type BentoBlock } from "@/lib/blocks-context"
@@ -64,6 +67,7 @@ const blockTools = [
   { type: "image", icon: ImageIcon, label: "Image", color: "text-bento-pink" },
   { type: "video", icon: Video, label: "Video", color: "text-red-500" },
   { type: "music", icon: Music, label: "Music", color: "text-bento-orange" },
+  { type: "social", icon: Instagram, label: "Social", color: "text-purple-500" }, // Added explicit social tool
   { type: "map", icon: MapPin, label: "Map", color: "text-bento-yellow" },
 ]
 
@@ -77,6 +81,24 @@ const socialIcons: Record<string, any> = {
   drive: HardDrive,
   spotify: Disc,
   tiktok: Music2,
+  twitch: Twitch,
+  email: Mail,
+  telegram: Send,
+  whatsapp: Send,
+}
+
+const socialColors: Record<string, string> = {
+  instagram: "bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600 border-none text-white",
+  twitter: "bg-sky-500 border-none text-white",
+  youtube: "bg-red-600 border-none text-white",
+  github: "bg-gray-900 border-none text-white",
+  facebook: "bg-blue-600 border-none text-white",
+  linkedin: "bg-blue-700 border-none text-white",
+  spotify: "bg-green-500 border-none text-white",
+  twitch: "bg-purple-600 border-none text-white",
+  tiktok: "bg-black border-none text-white",
+  email: "bg-gray-100 dark:bg-gray-800 text-foreground",
+  telegram: "bg-sky-400 border-none text-white",
 }
 
 const colorPresets = [
@@ -98,7 +120,7 @@ interface SortableBlockProps {
   onSelect: (id: string) => void
   onHover: (id: string | null) => void
   onDelete: (id: string) => void
-  getBlockSize: (size: string) => string
+  getBlockSize: (cols: number, rows: number) => string
 }
 
 function SortableBlock({
@@ -125,17 +147,20 @@ function SortableBlock({
   }
 
   const SocialIcon = block.social ? socialIcons[block.social] : null
+  const isSocial = block.type === "social" && block.social
+  const socialColorClass = isSocial && block.social ? socialColors[block.social] : ""
 
   return (
     <div
       ref={setNodeRef}
       style={style}
       className={cn(
-        "group relative rounded-4xl p-5 cursor-pointer transition-all duration-500",
-        getBlockSize(block.size),
-        block.color || "bg-card",
+        "group relative rounded-4xl p-5 cursor-pointer transition-all duration-500 flex flex-col justify-between",
+        getBlockSize(block.cols, block.rows),
+        isSocial ? socialColorClass : (block.color || "bg-card"),
         isSelected ? "ring-2 ring-bento-green ring-offset-4 ring-offset-background shadow-xl scale-[0.98]" : "hover:shadow-lg hover:scale-[1.02]",
-        isDragging ? "opacity-50 z-50 shadow-2xl scale-95" : "opacity-100"
+        isDragging ? "opacity-50 z-50 shadow-2xl scale-95" : "opacity-100",
+        !isSocial && "bg-card border border-border"
       )}
       onClick={() => onSelect(block.id)}
       onMouseEnter={() => onHover(block.id)}
@@ -171,11 +196,28 @@ function SortableBlock({
 
       {/* Block Content */}
       <div className="h-full flex flex-col justify-between relative z-0">
-        {block.type === "social" && SocialIcon ? (
-          <div className="flex items-center justify-center h-full">
-            <SocialIcon className="w-10 h-10 text-white drop-shadow-md" />
-          </div>
+        {/* Social Block Layout */}
+        {isSocial && SocialIcon ? (
+          <>
+            <div className="flex items-start justify-between">
+              <SocialIcon className="w-8 h-8 text-white drop-shadow-md" />
+            </div>
+
+            <div className="mt-auto">
+              {block.username && (
+                <p className="text-[11px] font-bold text-white/90 mb-0.5 tracking-wide">
+                  {block.username}
+                </p>
+              )}
+              {block.title && !block.username && (
+                <p className="text-[11px] font-bold text-white/90 mb-0.5 tracking-wide">
+                  {block.title}
+                </p>
+              )}
+            </div>
+          </>
         ) : (
+          /* Standard Block Layout */
           <>
             <div>
               {block.title && (
@@ -266,25 +308,21 @@ export function BentoEditor() {
     if (platform) {
       updateBlock(selectedBlock.id, {
         url,
-        type: platform.type,
+        type: platform.type as BentoBlock["type"],
         social: platform.social,
         title: selectedBlock.title === `New ${selectedBlock.type}` ? platform.title : selectedBlock.title,
         color: selectedBlock.color === "bg-card" ? platform.color : selectedBlock.color,
+        username: platform.username,
       })
     } else {
       updateBlock(selectedBlock.id, { url })
     }
   }
 
-  const getBlockSize = (size: string) => {
-    switch (size) {
-      case "small":
-        return "col-span-1 row-span-1"
-      case "large":
-        return "col-span-2 row-span-2"
-      default:
-        return "col-span-2 row-span-1"
-    }
+  const getBlockSize = (cols: number, rows: number) => {
+    // cols peut être 1, 2, ou 4
+    // rows peut être 1 ou 2
+    return `col-span-${cols} row-span-${rows}`
   }
 
   return (
@@ -343,7 +381,7 @@ export function BentoEditor() {
           </div>
         </div>
 
-        {/* Bento Grid with DND */}
+        {/* Bento Grid with DND - Now 4 columns */}
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
@@ -353,7 +391,7 @@ export function BentoEditor() {
             items={blocks.map((b) => b.id)}
             strategy={rectSortingStrategy}
           >
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[130px]">
+            <div className="grid grid-cols-4 gap-4 auto-rows-[130px]">
               {blocks.map((block) => (
                 <SortableBlock
                   key={block.id}
@@ -442,63 +480,103 @@ export function BentoEditor() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2.5">
-                  <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground px-1">Size</Label>
+                  <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground px-1">Width</Label>
                   <Select
-                    value={selectedBlock.size}
-                    onValueChange={(val: any) => updateBlock(selectedBlock.id, { size: val })}
+                    value={selectedBlock.cols?.toString() || "2"}
+                    onValueChange={(val: any) => updateBlock(selectedBlock.id, { cols: parseInt(val) as 1 | 2 | 4 })}
                   >
                     <SelectTrigger className="rounded-2xl bg-secondary/50 border-none h-12 px-4 font-medium">
-                      <SelectValue placeholder="Size" />
+                      <SelectValue placeholder="Width" />
                     </SelectTrigger>
                     <SelectContent className="rounded-2xl border-border bg-card">
-                      <SelectItem value="small">Small (1x1)</SelectItem>
-                      <SelectItem value="medium">Medium (2x1)</SelectItem>
-                      <SelectItem value="large">Large (2x2)</SelectItem>
+                      <SelectItem value="1">1/4 Width</SelectItem>
+                      <SelectItem value="2">2/4 Width</SelectItem>
+                      <SelectItem value="4">Full Width</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div className="space-y-2.5">
-                  <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground px-1">Style</Label>
+                  <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground px-1">Height</Label>
                   <Select
-                    value={selectedBlock.color || "bg-card"}
-                    onValueChange={(val: any) => updateBlock(selectedBlock.id, { color: val })}
+                    value={selectedBlock.rows?.toString() || "1"}
+                    onValueChange={(val: any) => updateBlock(selectedBlock.id, { rows: parseInt(val) as 1 | 2 })}
                   >
                     <SelectTrigger className="rounded-2xl bg-secondary/50 border-none h-12 px-4 font-medium">
-                      <SelectValue placeholder="Color" />
+                      <SelectValue placeholder="Height" />
                     </SelectTrigger>
                     <SelectContent className="rounded-2xl border-border bg-card">
-                      {colorPresets.map((preset) => (
-                        <SelectItem key={preset.value} value={preset.value}>
-                          <div className="flex items-center gap-2">
-                            <div className={cn("w-3 h-3 rounded-full border border-border/10", preset.value)} />
-                            {preset.name}
-                          </div>
-                        </SelectItem>
-                      ))}
+                      <SelectItem value="1">Standard</SelectItem>
+                      <SelectItem value="2">Tall</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
 
+              <div className="space-y-2.5">
+                <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground px-1">Style</Label>
+                <Select
+                  value={selectedBlock.color || "bg-card"}
+                  onValueChange={(val: any) => updateBlock(selectedBlock.id, { color: val })}
+                >
+                  <SelectTrigger className="rounded-2xl bg-secondary/50 border-none h-12 px-4 font-medium">
+                    <SelectValue placeholder="Color" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-2xl border-border bg-card">
+                    {colorPresets.map((preset) => (
+                      <SelectItem key={preset.value} value={preset.value}>
+                        <div className="flex items-center gap-2">
+                          <div className={cn("w-3 h-3 rounded-full border border-border/10", preset.value)} />
+                          {preset.name}
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
               {selectedBlock.type === "social" && (
-                <div className="space-y-2.5">
-                  <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground px-1">Platform</Label>
-                  <Select
-                    value={selectedBlock.social || ""}
-                    onValueChange={(val: any) => updateBlock(selectedBlock.id, { social: val })}
-                  >
-                    <SelectTrigger className="rounded-2xl bg-secondary/50 border-none h-12 px-4 font-medium">
-                      <SelectValue placeholder="Platform" />
-                    </SelectTrigger>
-                    <SelectContent className="rounded-2xl border-border bg-card">
-                      <SelectItem value="instagram">Instagram</SelectItem>
-                      <SelectItem value="twitter">Twitter</SelectItem>
-                      <SelectItem value="youtube">YouTube</SelectItem>
-                      <SelectItem value="github">GitHub</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+                <>
+                  <div className="space-y-2.5">
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground px-1">Platform</Label>
+                    <Select
+                      value={selectedBlock.social || ""}
+                      onValueChange={(val: any) => updateBlock(selectedBlock.id, {
+                        social: val,
+                        // Auto-apply brand color when platform is selected if color is default or another brand color
+                        color: socialColors[val] ? socialColors[val] : selectedBlock.color
+                      })}
+                    >
+                      <SelectTrigger className="rounded-2xl bg-secondary/50 border-none h-12 px-4 font-medium">
+                        <SelectValue placeholder="Platform" />
+                      </SelectTrigger>
+                      <SelectContent className="rounded-2xl border-border bg-card h-64">
+                        <SelectItem value="instagram">Instagram</SelectItem>
+                        <SelectItem value="twitter">Twitter / X</SelectItem>
+                        <SelectItem value="youtube">YouTube</SelectItem>
+                        <SelectItem value="tiktok">TikTok</SelectItem>
+                        <SelectItem value="linkedin">LinkedIn</SelectItem>
+                        <SelectItem value="github">GitHub</SelectItem>
+                        <SelectItem value="twitch">Twitch</SelectItem>
+                        <SelectItem value="facebook">Facebook</SelectItem>
+                        <SelectItem value="spotify">Spotify</SelectItem>
+                        <SelectItem value="email">Email</SelectItem>
+                        <SelectItem value="telegram">Telegram</SelectItem>
+                        <SelectItem value="whatsapp">WhatsApp</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2.5">
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground px-1">Username / Handle</Label>
+                    <Input
+                      value={selectedBlock.username || ""}
+                      onChange={(e) => updateBlock(selectedBlock.id, { username: e.target.value })}
+                      placeholder="@username"
+                      className="rounded-2xl bg-secondary/50 border-none focus-visible:ring-2 focus-visible:ring-bento-green h-12 px-4 font-medium"
+                    />
+                  </div>
+                </>
               )}
             </div>
 

@@ -17,6 +17,11 @@ export async function getPublicProfile(username: string) {
             return null
         }
 
+        // Track visit (async, don't block response)
+        prisma.pageVisit.create({
+            data: { userId: user.id }
+        }).catch(e => console.error("Failed to track visit:", e))
+
         return {
             user: {
                 id: user.id,
@@ -35,5 +40,17 @@ export async function getPublicProfile(username: string) {
     } catch (error) {
         console.error("Failed to get public profile:", error)
         return null
+    }
+}
+
+export async function trackBlockClick(blockId: string) {
+    try {
+        await prisma.blockClick.create({
+            data: { blockId }
+        })
+        return { success: true }
+    } catch (error) {
+        console.error("Failed to track click:", error)
+        return { success: false }
     }
 }

@@ -215,6 +215,7 @@ export type UserWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   blocks?: Prisma.BlockListRelationFilter
+  visits?: Prisma.PageVisitListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -228,6 +229,7 @@ export type UserOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   blocks?: Prisma.BlockOrderByRelationAggregateInput
+  visits?: Prisma.PageVisitOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -244,6 +246,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   blocks?: Prisma.BlockListRelationFilter
+  visits?: Prisma.PageVisitListRelationFilter
 }, "id" | "clerkId" | "email" | "username">
 
 export type UserOrderByWithAggregationInput = {
@@ -287,6 +290,7 @@ export type UserCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   blocks?: Prisma.BlockCreateNestedManyWithoutUserInput
+  visits?: Prisma.PageVisitCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -300,6 +304,7 @@ export type UserUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutUserInput
+  visits?: Prisma.PageVisitUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -313,6 +318,7 @@ export type UserUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   blocks?: Prisma.BlockUpdateManyWithoutUserNestedInput
+  visits?: Prisma.PageVisitUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -326,6 +332,7 @@ export type UserUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   blocks?: Prisma.BlockUncheckedUpdateManyWithoutUserNestedInput
+  visits?: Prisma.PageVisitUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -431,6 +438,20 @@ export type UserUpdateOneRequiredWithoutBlocksNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBlocksInput, Prisma.UserUpdateWithoutBlocksInput>, Prisma.UserUncheckedUpdateWithoutBlocksInput>
 }
 
+export type UserCreateNestedOneWithoutVisitsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutVisitsInput, Prisma.UserUncheckedCreateWithoutVisitsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVisitsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutVisitsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutVisitsInput, Prisma.UserUncheckedCreateWithoutVisitsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVisitsInput
+  upsert?: Prisma.UserUpsertWithoutVisitsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutVisitsInput, Prisma.UserUpdateWithoutVisitsInput>, Prisma.UserUncheckedUpdateWithoutVisitsInput>
+}
+
 export type UserCreateWithoutBlocksInput = {
   id?: string
   clerkId: string
@@ -441,6 +462,7 @@ export type UserCreateWithoutBlocksInput = {
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  visits?: Prisma.PageVisitCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBlocksInput = {
@@ -453,6 +475,7 @@ export type UserUncheckedCreateWithoutBlocksInput = {
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  visits?: Prisma.PageVisitUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBlocksInput = {
@@ -481,6 +504,7 @@ export type UserUpdateWithoutBlocksInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  visits?: Prisma.PageVisitUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBlocksInput = {
@@ -493,6 +517,75 @@ export type UserUncheckedUpdateWithoutBlocksInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  visits?: Prisma.PageVisitUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutVisitsInput = {
+  id?: string
+  clerkId: string
+  email: string
+  username: string
+  name?: string | null
+  bio?: string | null
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  blocks?: Prisma.BlockCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutVisitsInput = {
+  id?: string
+  clerkId: string
+  email: string
+  username: string
+  name?: string | null
+  bio?: string | null
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutVisitsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutVisitsInput, Prisma.UserUncheckedCreateWithoutVisitsInput>
+}
+
+export type UserUpsertWithoutVisitsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutVisitsInput, Prisma.UserUncheckedUpdateWithoutVisitsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutVisitsInput, Prisma.UserUncheckedCreateWithoutVisitsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutVisitsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutVisitsInput, Prisma.UserUncheckedUpdateWithoutVisitsInput>
+}
+
+export type UserUpdateWithoutVisitsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  clerkId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  blocks?: Prisma.BlockUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutVisitsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  clerkId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  blocks?: Prisma.BlockUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -502,10 +595,12 @@ export type UserUncheckedUpdateWithoutBlocksInput = {
 
 export type UserCountOutputType = {
   blocks: number
+  visits: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   blocks?: boolean | UserCountOutputTypeCountBlocksArgs
+  visits?: boolean | UserCountOutputTypeCountVisitsArgs
 }
 
 /**
@@ -525,6 +620,13 @@ export type UserCountOutputTypeCountBlocksArgs<ExtArgs extends runtime.Types.Ext
   where?: Prisma.BlockWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountVisitsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PageVisitWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -537,6 +639,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdAt?: boolean
   updatedAt?: boolean
   blocks?: boolean | Prisma.User$blocksArgs<ExtArgs>
+  visits?: boolean | Prisma.User$visitsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -579,6 +682,7 @@ export type UserSelectScalar = {
 export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "clerkId" | "email" | "username" | "name" | "bio" | "image" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   blocks?: boolean | Prisma.User$blocksArgs<ExtArgs>
+  visits?: boolean | Prisma.User$visitsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -588,6 +692,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "User"
   objects: {
     blocks: Prisma.$BlockPayload<ExtArgs>[]
+    visits: Prisma.$PageVisitPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -994,6 +1099,7 @@ readonly fields: UserFieldRefs;
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   blocks<T extends Prisma.User$blocksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$blocksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  visits<T extends Prisma.User$visitsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$visitsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PageVisitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1441,6 +1547,30 @@ export type User$blocksArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   distinct?: Prisma.BlockScalarFieldEnum | Prisma.BlockScalarFieldEnum[]
+}
+
+/**
+ * User.visits
+ */
+export type User$visitsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PageVisit
+   */
+  select?: Prisma.PageVisitSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PageVisit
+   */
+  omit?: Prisma.PageVisitOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PageVisitInclude<ExtArgs> | null
+  where?: Prisma.PageVisitWhereInput
+  orderBy?: Prisma.PageVisitOrderByWithRelationInput | Prisma.PageVisitOrderByWithRelationInput[]
+  cursor?: Prisma.PageVisitWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PageVisitScalarFieldEnum | Prisma.PageVisitScalarFieldEnum[]
 }
 
 /**

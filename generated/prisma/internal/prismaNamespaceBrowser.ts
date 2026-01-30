@@ -52,7 +52,9 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
-  Block: 'Block'
+  Block: 'Block',
+  PageVisit: 'PageVisit',
+  BlockClick: 'BlockClick'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -92,9 +94,11 @@ export const BlockScalarFieldEnum = {
   type: 'type',
   title: 'title',
   content: 'content',
+  username: 'username',
   url: 'url',
   color: 'color',
-  size: 'size',
+  cols: 'cols',
+  rows: 'rows',
   social: 'social',
   position: 'position',
   createdAt: 'createdAt',
@@ -102,6 +106,24 @@ export const BlockScalarFieldEnum = {
 } as const
 
 export type BlockScalarFieldEnum = (typeof BlockScalarFieldEnum)[keyof typeof BlockScalarFieldEnum]
+
+
+export const PageVisitScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type PageVisitScalarFieldEnum = (typeof PageVisitScalarFieldEnum)[keyof typeof PageVisitScalarFieldEnum]
+
+
+export const BlockClickScalarFieldEnum = {
+  id: 'id',
+  blockId: 'blockId',
+  createdAt: 'createdAt'
+} as const
+
+export type BlockClickScalarFieldEnum = (typeof BlockClickScalarFieldEnum)[keyof typeof BlockClickScalarFieldEnum]
 
 
 export const SortOrder = {

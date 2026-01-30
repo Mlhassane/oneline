@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button"
 import { Menu, X, Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
+import { ThemeToggle } from "@/components/theme-toggle"
+import { LanguageToggle } from "@/components/language-toggle"
 
 const navLinks = [
   { label: "Features", href: "#features" },
@@ -84,7 +86,10 @@ export function Navbar() {
               </div>
             </div>
 
+            {/* CTA Buttons */}
             <div className="hidden md:flex items-center gap-2">
+              <LanguageToggle />
+              <ThemeToggle />
               <Link href="/login">
                 <Button
                   variant="ghost"

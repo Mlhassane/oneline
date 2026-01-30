@@ -49,3 +49,13 @@ export type User = Prisma.UserModel
  * 
  */
 export type Block = Prisma.BlockModel
+/**
+ * Model PageVisit
+ * 
+ */
+export type PageVisit = Prisma.PageVisitModel
+/**
+ * Model BlockClick
+ * 
+ */
+export type BlockClick = Prisma.BlockClickModel

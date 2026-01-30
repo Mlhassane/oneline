@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, use } from "react"
 import { notFound } from "next/navigation"
 import {
     Link2,
@@ -14,20 +14,25 @@ import {
     Linkedin,
     HardDrive,
     Disc,
-    Music2
+    Music2,
+    Mail,
+    Twitch,
+    Send
 } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { getPublicProfile } from "@/lib/actions/public"
+import { getPublicProfile, trackBlockClick } from "@/lib/actions/public"
 
 interface BentoBlockType {
     id: string
     type: "link" | "text" | "image" | "video" | "music" | "map" | "social"
     title: string
     content?: string | null
+    username?: string | null // Pour le pseudo social (ex: @sarah.designs)
     url?: string | null
     color?: string | null
-    size: "small" | "medium" | "large"
-    social?: "instagram" | "twitter" | "youtube" | "github" | "facebook" | "linkedin" | "drive" | "spotify" | "tiktok" | null
+    cols: 1 | 2 | 4
+    rows: 1 | 2
+    social?: "instagram" | "twitter" | "youtube" | "github" | "facebook" | "linkedin" | "drive" | "spotify" | "tiktok" | "twitch" | "email" | "telegram" | "whatsapp" | null
 }
 
 interface UserData {
@@ -48,21 +53,32 @@ const socialIcons: Record<string, any> = {
     drive: HardDrive,
     spotify: Disc,
     tiktok: Music2,
+    twitch: Twitch,
+    email: Mail,
+    telegram: Send,
+    whatsapp: Send, // Using Send as placeholder or Phone icon
 }
 
-const getBlockSize = (size: string) => {
-    switch (size) {
-        case "small":
-            return "col-span-1 row-span-1"
-        case "large":
-            return "col-span-2 row-span-2"
-        default:
-            return "col-span-2 row-span-1"
-    }
+const socialColors: Record<string, string> = {
+    instagram: "bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600 border-none text-white",
+    twitter: "bg-sky-500 border-none text-white", // Twitter Blue
+    youtube: "bg-red-600 border-none text-white",
+    github: "bg-gray-900 border-none text-white",
+    facebook: "bg-blue-600 border-none text-white",
+    linkedin: "bg-blue-700 border-none text-white",
+    spotify: "bg-green-500 border-none text-white",
+    twitch: "bg-purple-600 border-none text-white",
+    tiktok: "bg-black border-none text-white",
+    email: "bg-gray-100 dark:bg-gray-800 text-foreground",
+    telegram: "bg-sky-400 border-none text-white",
 }
 
-export default function PublicProfilePage({ params }: { params: { username: string } }) {
-    const { username } = params
+const getBlockSize = (cols: number, rows: number) => {
+    return `col-span-${cols} row-span-${rows}`
+}
+
+export default function PublicProfilePage({ params }: { params: Promise<{ username: string }> }) {
+    const { username } = use(params)
     const [user, setUser] = useState<UserData | null>(null)
     const [blocks, setBlocks] = useState<BentoBlockType[]>([])
     const [isLoading, setIsLoading] = useState(true)
@@ -79,6 +95,10 @@ export default function PublicProfilePage({ params }: { params: { username: stri
 
         fetchData()
     }, [username])
+
+    const handleBlockClick = async (blockId: string) => {
+        trackBlockClick(blockId).catch(console.error)
+    }
 
     if (isLoading) {
         return (
@@ -123,74 +143,93 @@ export default function PublicProfilePage({ params }: { params: { username: stri
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[130px]">
                     {blocks.map((block) => {
                         const SocialIcon = block.social ? socialIcons[block.social] : null
+                        const isSocial = block.type === "social" && block.social
+                        const socialColorClass = isSocial && block.social ? socialColors[block.social] : ""
+                        
                         return (
                             <a
                                 key={block.id}
                                 href={block.url || "#"}
                                 target={block.url ? "_blank" : undefined}
                                 rel={block.url ? "noopener noreferrer" : undefined}
+                                onClick={() => handleBlockClick(block.id)}
                                 className={cn(
-                                    "group relative rounded-4xl p-5 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl overflow-hidden",
-                                    getBlockSize(block.size),
-                                    block.color || "bg-card"
+                                    "group relative rounded-4xl p-5 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl overflow-hidden flex flex-col justify-between",
+                                    getBlockSize(block.cols, block.rows),
+                                    isSocial ? socialColorClass : (block.color || "bg-card"),
+                                    !isSocial && "bg-card border border-border"
                                 )}
                             >
                                 <div className="h-full flex flex-col justify-between relative z-10">
-                                    {block.type === "social" && SocialIcon && block.social !== "drive" ? (
-                                        <div className="flex items-center justify-center h-full">
-                                            <SocialIcon className="w-10 h-10 text-white drop-shadow-lg" />
-                                        </div>
-                                    ) : (
+                                    {/* Social Block Layout */}
+                                    {isSocial && SocialIcon ? (
                                         <>
-                                            <div>
+                                            <div className="flex items-start justify-between">
+                                                <SocialIcon className="w-8 h-8 text-white drop-shadow-md" />
+                                                {/* External Link Icon for Social */}
+                                                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-white/80">
+                                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                                                        <polyline points="15 3 21 3 21 9" />
+                                                        <line x1="10" y1="14" x2="21" y2="3" />
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            
+                                            <div className="mt-auto">
+                                                {block.username && (
+                                                    <p className="text-[11px] font-bold text-white/90 mb-0.5 tracking-wide">
+                                                        {block.username}
+                                                    </p>
+                                                )}
+                                                {block.title && !block.username && (
+                                                    <p className="text-[11px] font-bold text-white/90 mb-0.5 tracking-wide">
+                                                        {block.title}
+                                                    </p>
+                                                )}
+                                            </div>
+                                        </>
+                                    ) : (
+                                        /* Standard Block Layout */
+                                        <>
+                                            <div className="flex items-start justify-between">
+                                                <div className={cn(
+                                                    "w-10 h-10 rounded-2xl flex items-center justify-center transition-colors",
+                                                    block.color ? "bg-white/20" : "bg-secondary group-hover:bg-secondary/80"
+                                                )}>
+                                                    {block.type === "link" && <Link2 className={cn("w-5 h-5", block.color ? "text-white" : "text-foreground")} />}
+                                                    {block.type === "map" && <MapPin className={cn("w-5 h-5", block.color ? "text-white" : "text-foreground")} />}
+                                                    {block.type === "image" && <ImageIcon className={cn("w-5 h-5", block.color ? "text-white" : "text-foreground")} />}
+                                                    {block.type === "music" && <Music2 className={cn("w-5 h-5", block.color ? "text-white" : "text-foreground")} />}
+                                                </div>
+                                            </div>
+
+                                            <div className="mt-auto space-y-1">
                                                 {block.title && (
-                                                    <h3 className="font-bold text-foreground text-sm mb-1.5 tracking-tight group-hover:text-bento-green transition-colors">
+                                                    <h3 className={cn(
+                                                        "font-bold text-sm tracking-tight transition-colors line-clamp-1",
+                                                        block.color ? "text-white" : "text-foreground group-hover:text-bento-green"
+                                                    )}>
                                                         {block.title}
                                                     </h3>
                                                 )}
                                                 {block.content && (
-                                                    <p className="text-[11px] text-muted-foreground leading-relaxed line-clamp-3 font-medium opacity-80">
+                                                    <p className={cn(
+                                                        "text-[11px] leading-relaxed line-clamp-2 font-medium",
+                                                        block.color ? "text-white/70" : "text-muted-foreground"
+                                                    )}>
                                                         {block.content}
                                                     </p>
-                                                )}
-                                            </div>
-                                            <div className="mt-auto">
-                                                {block.type === "music" && !SocialIcon && (
-                                                    <div className="flex items-center gap-2.5 bg-background/40 backdrop-blur-sm w-fit px-2.5 py-1 rounded-full border border-white/5">
-                                                        <div className="w-1.5 h-1.5 bg-bento-green rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
-                                                        <span className="text-[10px] font-bold text-foreground">LIVE</span>
-                                                    </div>
-                                                )}
-                                                {block.type === "music" && SocialIcon && (
-                                                    <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center border border-white/10">
-                                                        <SocialIcon className="w-4 h-4 text-white" />
-                                                    </div>
-                                                )}
-                                                {block.type === "map" && (
-                                                    <div className="w-8 h-8 rounded-full bg-bento-orange/20 flex items-center justify-center border border-bento-orange/10">
-                                                        <MapPin className="w-4 h-4 text-bento-orange" />
-                                                    </div>
-                                                )}
-                                                {block.type === "link" && (
-                                                    <div className="w-8 h-8 rounded-full bg-bento-blue/20 flex items-center justify-center border border-bento-blue/10">
-                                                        <Link2 className="w-4 h-4 text-bento-blue" />
-                                                    </div>
-                                                )}
-                                                {block.type === "image" && (
-                                                    <div className="w-8 h-8 rounded-full bg-bento-pink/20 flex items-center justify-center border border-bento-pink/10">
-                                                        <ImageIcon className="w-4 h-4 text-bento-pink" />
-                                                    </div>
-                                                )}
-                                                {block.type === "social" && block.social === "drive" && SocialIcon && (
-                                                    <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center border border-white/10">
-                                                        <SocialIcon className="w-4 h-4 text-white" />
-                                                    </div>
                                                 )}
                                             </div>
                                         </>
                                     )}
                                 </div>
-                                <div className="absolute inset-0 bg-linear-to-t from-background/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                                
+                                {/* Hover Effect Overlay */}
+                                {!isSocial && (
+                                    <div className="absolute inset-0 bg-linear-to-t from-background/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                                )}
                             </a>
                         )
                     })}

@@ -12,8 +12,10 @@ export async function getBlocks(userId: string) {
 
         return blocks.map((b: any) => ({
             ...b,
-            size: b.size as BentoBlock["size"],
+            cols: b.cols as BentoBlock["cols"],
+            rows: b.rows as BentoBlock["rows"],
             type: b.type as BentoBlock["type"],
+            username: b.username,
             social: b.social as BentoBlock["social"] || null,
         }))
     } catch (error) {
@@ -31,7 +33,9 @@ export async function addBlockAction(userId: string, type: string) {
                 userId,
                 type,
                 title: `New ${type}`,
-                size: "medium",
+                cols: 2,
+                rows: 1,
+                username: null,
                 position: count,
             },
         })

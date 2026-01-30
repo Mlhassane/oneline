@@ -2,19 +2,19 @@
 
 import { useState } from "react"
 import { cn } from "@/lib/utils"
-import { 
-  Monitor, 
-  Smartphone, 
-  Plus, 
-  Settings, 
-  Eye, 
-  Share2, 
-  Grip, 
-  ImageIcon, 
-  Link, 
-  Type, 
-  Music, 
-  Video, 
+import {
+  Monitor,
+  Smartphone,
+  Plus,
+  Settings,
+  Eye,
+  Share2,
+  Grip,
+  ImageIcon,
+  Link,
+  Type,
+  Music,
+  Video,
   MapPin,
   Twitter,
   Instagram,
@@ -39,82 +39,82 @@ const mockUser = {
 
 // Mock bento cards for the user's page
 const mockCards = [
-  { 
-    id: 1, 
-    type: "social", 
-    platform: "twitter", 
-    icon: Twitter, 
+  {
+    id: 1,
+    type: "social",
+    platform: "twitter",
+    icon: Twitter,
     color: "bg-[#1DA1F2]",
     label: "@sarahchen",
     size: "small"
   },
-  { 
-    id: 2, 
-    type: "social", 
-    platform: "instagram", 
-    icon: Instagram, 
+  {
+    id: 2,
+    type: "social",
+    platform: "instagram",
+    icon: Instagram,
     color: "bg-gradient-to-br from-[#833AB4] via-[#FD1D1D] to-[#F77737]",
     label: "@sarah.designs",
     size: "small"
   },
-  { 
-    id: 3, 
-    type: "image", 
+  {
+    id: 3,
+    type: "image",
     src: "/placeholder-portfolio.jpg",
     alt: "Portfolio Preview",
     size: "large"
   },
-  { 
-    id: 4, 
-    type: "link", 
+  {
+    id: 4,
+    type: "link",
     title: "My Portfolio",
     url: "sarahchen.design",
     icon: ExternalLink,
     color: "bg-bento-green",
     size: "medium"
   },
-  { 
-    id: 5, 
-    type: "social", 
-    platform: "youtube", 
-    icon: Youtube, 
+  {
+    id: 5,
+    type: "social",
+    platform: "youtube",
+    icon: Youtube,
     color: "bg-[#FF0000]",
     label: "Design Tutorials",
     size: "small"
   },
-  { 
-    id: 6, 
-    type: "social", 
-    platform: "linkedin", 
-    icon: Linkedin, 
+  {
+    id: 6,
+    type: "social",
+    platform: "linkedin",
+    icon: Linkedin,
     color: "bg-[#0A66C2]",
     label: "Connect",
     size: "small"
   },
-  { 
-    id: 7, 
-    type: "text", 
+  {
+    id: 7,
+    type: "text",
     content: "Currently accepting freelance projects for Q1 2024",
     size: "medium"
   },
-  { 
-    id: 8, 
-    type: "social", 
-    platform: "github", 
-    icon: Github, 
+  {
+    id: 8,
+    type: "social",
+    platform: "github",
+    icon: Github,
     color: "bg-[#333]",
     label: "@sarahchen",
     size: "small"
   },
-  { 
-    id: 9, 
-    type: "location", 
+  {
+    id: 9,
+    type: "location",
     city: "San Francisco, CA",
     size: "small"
   },
-  { 
-    id: 10, 
-    type: "music", 
+  {
+    id: 10,
+    type: "music",
     track: "Lofi Beats",
     artist: "ChillHop",
     size: "medium"
@@ -133,7 +133,7 @@ const sidebarTools = [
 
 function BentoCard({ card, isMobile }: { card: typeof mockCards[0], isMobile?: boolean }) {
   const baseClasses = "rounded-2xl transition-all duration-300 hover:scale-[1.02] cursor-pointer group overflow-hidden"
-  
+
   const sizeClasses = isMobile ? {
     small: "col-span-1 row-span-1",
     medium: "col-span-2 row-span-1",
@@ -145,9 +145,11 @@ function BentoCard({ card, isMobile }: { card: typeof mockCards[0], isMobile?: b
   }
 
   if (card.type === "social") {
+    const Icon = card.icon
+    if (!Icon) return null
     return (
       <div className={cn(baseClasses, sizeClasses[card.size as keyof typeof sizeClasses], card.color, "p-4 flex flex-col justify-between")}>
-        <card.icon className="w-6 h-6 text-white" />
+        <Icon className="w-6 h-6 text-white" />
         <span className="text-white text-xs font-medium opacity-80 group-hover:opacity-100 transition-opacity">{card.label}</span>
       </div>
     )
@@ -222,7 +224,7 @@ function DesktopDashboard() {
             <div className="w-3 h-3 rounded-full bg-green-500" />
           </div>
           <div className="ml-4 px-3 py-1 bg-secondary rounded-lg text-xs text-muted-foreground">
-            bento.me/{mockUser.username}
+            oneli.ne/{mockUser.username}
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -291,7 +293,7 @@ function DesktopDashboard() {
             </div>
 
             {/* Add block button */}
-            <button 
+            <button
               type="button"
               className="w-full mt-4 py-4 border-2 border-dashed border-border rounded-2xl flex items-center justify-center gap-2 text-muted-foreground hover:border-bento-green hover:text-bento-green transition-colors group"
             >
@@ -390,8 +392,8 @@ export function DashboardShowcase() {
             onClick={() => setActiveView("desktop")}
             className={cn(
               "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300",
-              activeView === "desktop" 
-                ? "bg-bento-green text-background" 
+              activeView === "desktop"
+                ? "bg-bento-green text-background"
                 : "text-muted-foreground hover:text-foreground"
             )}
           >
@@ -403,8 +405,8 @@ export function DashboardShowcase() {
             onClick={() => setActiveView("mobile")}
             className={cn(
               "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300",
-              activeView === "mobile" 
-                ? "bg-bento-green text-background" 
+              activeView === "mobile"
+                ? "bg-bento-green text-background"
                 : "text-muted-foreground hover:text-foreground"
             )}
           >
@@ -418,12 +420,12 @@ export function DashboardShowcase() {
       <div className="relative">
         {/* Background glow */}
         <div className="absolute inset-0 bg-gradient-to-r from-bento-green/10 via-bento-blue/10 to-bento-pink/10 blur-3xl -z-10" />
-        
+
         {/* Desktop view */}
         <div className={cn(
           "transition-all duration-500",
-          activeView === "desktop" 
-            ? "opacity-100 scale-100" 
+          activeView === "desktop"
+            ? "opacity-100 scale-100"
             : "opacity-0 scale-95 absolute inset-0 pointer-events-none"
         )}>
           <DesktopDashboard />
@@ -432,8 +434,8 @@ export function DashboardShowcase() {
         {/* Mobile view */}
         <div className={cn(
           "transition-all duration-500 py-8",
-          activeView === "mobile" 
-            ? "opacity-100 scale-100" 
+          activeView === "mobile"
+            ? "opacity-100 scale-100"
             : "opacity-0 scale-95 absolute inset-0 pointer-events-none"
         )}>
           <MobileDashboard />
@@ -443,23 +445,23 @@ export function DashboardShowcase() {
       {/* Feature highlights */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
         {[
-          { 
-            title: "Drag & Drop", 
+          {
+            title: "Drag & Drop",
             description: "Intuitive editor to arrange your content exactly how you want it.",
             color: "bg-bento-green/10 border-bento-green/20 text-bento-green"
           },
-          { 
-            title: "Real-time Preview", 
+          {
+            title: "Real-time Preview",
             description: "See changes instantly as you build your perfect page.",
             color: "bg-bento-blue/10 border-bento-blue/20 text-bento-blue"
           },
-          { 
-            title: "One-click Publish", 
+          {
+            title: "One-click Publish",
             description: "Go live in seconds. Share your page with the world.",
             color: "bg-bento-pink/10 border-bento-pink/20 text-bento-pink"
           },
         ].map((feature) => (
-          <div 
+          <div
             key={feature.title}
             className={cn(
               "p-6 rounded-2xl border transition-all duration-300 hover:scale-[1.02]",

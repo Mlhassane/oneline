@@ -27,10 +27,14 @@ export type AggregateBlock = {
 }
 
 export type BlockAvgAggregateOutputType = {
+  cols: number | null
+  rows: number | null
   position: number | null
 }
 
 export type BlockSumAggregateOutputType = {
+  cols: number | null
+  rows: number | null
   position: number | null
 }
 
@@ -40,9 +44,11 @@ export type BlockMinAggregateOutputType = {
   type: string | null
   title: string | null
   content: string | null
+  username: string | null
   url: string | null
   color: string | null
-  size: string | null
+  cols: number | null
+  rows: number | null
   social: string | null
   position: number | null
   createdAt: Date | null
@@ -55,9 +61,11 @@ export type BlockMaxAggregateOutputType = {
   type: string | null
   title: string | null
   content: string | null
+  username: string | null
   url: string | null
   color: string | null
-  size: string | null
+  cols: number | null
+  rows: number | null
   social: string | null
   position: number | null
   createdAt: Date | null
@@ -70,9 +78,11 @@ export type BlockCountAggregateOutputType = {
   type: number
   title: number
   content: number
+  username: number
   url: number
   color: number
-  size: number
+  cols: number
+  rows: number
   social: number
   position: number
   createdAt: number
@@ -82,10 +92,14 @@ export type BlockCountAggregateOutputType = {
 
 
 export type BlockAvgAggregateInputType = {
+  cols?: true
+  rows?: true
   position?: true
 }
 
 export type BlockSumAggregateInputType = {
+  cols?: true
+  rows?: true
   position?: true
 }
 
@@ -95,9 +109,11 @@ export type BlockMinAggregateInputType = {
   type?: true
   title?: true
   content?: true
+  username?: true
   url?: true
   color?: true
-  size?: true
+  cols?: true
+  rows?: true
   social?: true
   position?: true
   createdAt?: true
@@ -110,9 +126,11 @@ export type BlockMaxAggregateInputType = {
   type?: true
   title?: true
   content?: true
+  username?: true
   url?: true
   color?: true
-  size?: true
+  cols?: true
+  rows?: true
   social?: true
   position?: true
   createdAt?: true
@@ -125,9 +143,11 @@ export type BlockCountAggregateInputType = {
   type?: true
   title?: true
   content?: true
+  username?: true
   url?: true
   color?: true
-  size?: true
+  cols?: true
+  rows?: true
   social?: true
   position?: true
   createdAt?: true
@@ -227,9 +247,11 @@ export type BlockGroupByOutputType = {
   type: string
   title: string
   content: string | null
+  username: string | null
   url: string | null
   color: string | null
-  size: string
+  cols: number
+  rows: number
   social: string | null
   position: number
   createdAt: Date
@@ -265,14 +287,17 @@ export type BlockWhereInput = {
   type?: Prisma.StringFilter<"Block"> | string
   title?: Prisma.StringFilter<"Block"> | string
   content?: Prisma.StringNullableFilter<"Block"> | string | null
+  username?: Prisma.StringNullableFilter<"Block"> | string | null
   url?: Prisma.StringNullableFilter<"Block"> | string | null
   color?: Prisma.StringNullableFilter<"Block"> | string | null
-  size?: Prisma.StringFilter<"Block"> | string
+  cols?: Prisma.IntFilter<"Block"> | number
+  rows?: Prisma.IntFilter<"Block"> | number
   social?: Prisma.StringNullableFilter<"Block"> | string | null
   position?: Prisma.IntFilter<"Block"> | number
   createdAt?: Prisma.DateTimeFilter<"Block"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Block"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  clicks?: Prisma.BlockClickListRelationFilter
 }
 
 export type BlockOrderByWithRelationInput = {
@@ -281,14 +306,17 @@ export type BlockOrderByWithRelationInput = {
   type?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrderInput | Prisma.SortOrder
+  username?: Prisma.SortOrderInput | Prisma.SortOrder
   url?: Prisma.SortOrderInput | Prisma.SortOrder
   color?: Prisma.SortOrderInput | Prisma.SortOrder
-  size?: Prisma.SortOrder
+  cols?: Prisma.SortOrder
+  rows?: Prisma.SortOrder
   social?: Prisma.SortOrderInput | Prisma.SortOrder
   position?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
+  clicks?: Prisma.BlockClickOrderByRelationAggregateInput
 }
 
 export type BlockWhereUniqueInput = Prisma.AtLeast<{
@@ -300,14 +328,17 @@ export type BlockWhereUniqueInput = Prisma.AtLeast<{
   type?: Prisma.StringFilter<"Block"> | string
   title?: Prisma.StringFilter<"Block"> | string
   content?: Prisma.StringNullableFilter<"Block"> | string | null
+  username?: Prisma.StringNullableFilter<"Block"> | string | null
   url?: Prisma.StringNullableFilter<"Block"> | string | null
   color?: Prisma.StringNullableFilter<"Block"> | string | null
-  size?: Prisma.StringFilter<"Block"> | string
+  cols?: Prisma.IntFilter<"Block"> | number
+  rows?: Prisma.IntFilter<"Block"> | number
   social?: Prisma.StringNullableFilter<"Block"> | string | null
   position?: Prisma.IntFilter<"Block"> | number
   createdAt?: Prisma.DateTimeFilter<"Block"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Block"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  clicks?: Prisma.BlockClickListRelationFilter
 }, "id">
 
 export type BlockOrderByWithAggregationInput = {
@@ -316,9 +347,11 @@ export type BlockOrderByWithAggregationInput = {
   type?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrderInput | Prisma.SortOrder
+  username?: Prisma.SortOrderInput | Prisma.SortOrder
   url?: Prisma.SortOrderInput | Prisma.SortOrder
   color?: Prisma.SortOrderInput | Prisma.SortOrder
-  size?: Prisma.SortOrder
+  cols?: Prisma.SortOrder
+  rows?: Prisma.SortOrder
   social?: Prisma.SortOrderInput | Prisma.SortOrder
   position?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -339,9 +372,11 @@ export type BlockScalarWhereWithAggregatesInput = {
   type?: Prisma.StringWithAggregatesFilter<"Block"> | string
   title?: Prisma.StringWithAggregatesFilter<"Block"> | string
   content?: Prisma.StringNullableWithAggregatesFilter<"Block"> | string | null
+  username?: Prisma.StringNullableWithAggregatesFilter<"Block"> | string | null
   url?: Prisma.StringNullableWithAggregatesFilter<"Block"> | string | null
   color?: Prisma.StringNullableWithAggregatesFilter<"Block"> | string | null
-  size?: Prisma.StringWithAggregatesFilter<"Block"> | string
+  cols?: Prisma.IntWithAggregatesFilter<"Block"> | number
+  rows?: Prisma.IntWithAggregatesFilter<"Block"> | number
   social?: Prisma.StringNullableWithAggregatesFilter<"Block"> | string | null
   position?: Prisma.IntWithAggregatesFilter<"Block"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Block"> | Date | string
@@ -353,14 +388,17 @@ export type BlockCreateInput = {
   type: string
   title: string
   content?: string | null
+  username?: string | null
   url?: string | null
   color?: string | null
-  size?: string
+  cols?: number
+  rows?: number
   social?: string | null
   position?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutBlocksInput
+  clicks?: Prisma.BlockClickCreateNestedManyWithoutBlockInput
 }
 
 export type BlockUncheckedCreateInput = {
@@ -369,13 +407,16 @@ export type BlockUncheckedCreateInput = {
   type: string
   title: string
   content?: string | null
+  username?: string | null
   url?: string | null
   color?: string | null
-  size?: string
+  cols?: number
+  rows?: number
   social?: string | null
   position?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  clicks?: Prisma.BlockClickUncheckedCreateNestedManyWithoutBlockInput
 }
 
 export type BlockUpdateInput = {
@@ -383,14 +424,17 @@ export type BlockUpdateInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  size?: Prisma.StringFieldUpdateOperationsInput | string
+  cols?: Prisma.IntFieldUpdateOperationsInput | number
+  rows?: Prisma.IntFieldUpdateOperationsInput | number
   social?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   position?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutBlocksNestedInput
+  clicks?: Prisma.BlockClickUpdateManyWithoutBlockNestedInput
 }
 
 export type BlockUncheckedUpdateInput = {
@@ -399,13 +443,16 @@ export type BlockUncheckedUpdateInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  size?: Prisma.StringFieldUpdateOperationsInput | string
+  cols?: Prisma.IntFieldUpdateOperationsInput | number
+  rows?: Prisma.IntFieldUpdateOperationsInput | number
   social?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   position?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clicks?: Prisma.BlockClickUncheckedUpdateManyWithoutBlockNestedInput
 }
 
 export type BlockCreateManyInput = {
@@ -414,9 +461,11 @@ export type BlockCreateManyInput = {
   type: string
   title: string
   content?: string | null
+  username?: string | null
   url?: string | null
   color?: string | null
-  size?: string
+  cols?: number
+  rows?: number
   social?: string | null
   position?: number
   createdAt?: Date | string
@@ -428,9 +477,11 @@ export type BlockUpdateManyMutationInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  size?: Prisma.StringFieldUpdateOperationsInput | string
+  cols?: Prisma.IntFieldUpdateOperationsInput | number
+  rows?: Prisma.IntFieldUpdateOperationsInput | number
   social?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   position?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -443,9 +494,11 @@ export type BlockUncheckedUpdateManyInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  size?: Prisma.StringFieldUpdateOperationsInput | string
+  cols?: Prisma.IntFieldUpdateOperationsInput | number
+  rows?: Prisma.IntFieldUpdateOperationsInput | number
   social?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   position?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -468,9 +521,11 @@ export type BlockCountOrderByAggregateInput = {
   type?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  username?: Prisma.SortOrder
   url?: Prisma.SortOrder
   color?: Prisma.SortOrder
-  size?: Prisma.SortOrder
+  cols?: Prisma.SortOrder
+  rows?: Prisma.SortOrder
   social?: Prisma.SortOrder
   position?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -478,6 +533,8 @@ export type BlockCountOrderByAggregateInput = {
 }
 
 export type BlockAvgOrderByAggregateInput = {
+  cols?: Prisma.SortOrder
+  rows?: Prisma.SortOrder
   position?: Prisma.SortOrder
 }
 
@@ -487,9 +544,11 @@ export type BlockMaxOrderByAggregateInput = {
   type?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  username?: Prisma.SortOrder
   url?: Prisma.SortOrder
   color?: Prisma.SortOrder
-  size?: Prisma.SortOrder
+  cols?: Prisma.SortOrder
+  rows?: Prisma.SortOrder
   social?: Prisma.SortOrder
   position?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -502,9 +561,11 @@ export type BlockMinOrderByAggregateInput = {
   type?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  username?: Prisma.SortOrder
   url?: Prisma.SortOrder
   color?: Prisma.SortOrder
-  size?: Prisma.SortOrder
+  cols?: Prisma.SortOrder
+  rows?: Prisma.SortOrder
   social?: Prisma.SortOrder
   position?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -512,7 +573,14 @@ export type BlockMinOrderByAggregateInput = {
 }
 
 export type BlockSumOrderByAggregateInput = {
+  cols?: Prisma.SortOrder
+  rows?: Prisma.SortOrder
   position?: Prisma.SortOrder
+}
+
+export type BlockScalarRelationFilter = {
+  is?: Prisma.BlockWhereInput
+  isNot?: Prisma.BlockWhereInput
 }
 
 export type BlockCreateNestedManyWithoutUserInput = {
@@ -565,18 +633,35 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type BlockCreateNestedOneWithoutClicksInput = {
+  create?: Prisma.XOR<Prisma.BlockCreateWithoutClicksInput, Prisma.BlockUncheckedCreateWithoutClicksInput>
+  connectOrCreate?: Prisma.BlockCreateOrConnectWithoutClicksInput
+  connect?: Prisma.BlockWhereUniqueInput
+}
+
+export type BlockUpdateOneRequiredWithoutClicksNestedInput = {
+  create?: Prisma.XOR<Prisma.BlockCreateWithoutClicksInput, Prisma.BlockUncheckedCreateWithoutClicksInput>
+  connectOrCreate?: Prisma.BlockCreateOrConnectWithoutClicksInput
+  upsert?: Prisma.BlockUpsertWithoutClicksInput
+  connect?: Prisma.BlockWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BlockUpdateToOneWithWhereWithoutClicksInput, Prisma.BlockUpdateWithoutClicksInput>, Prisma.BlockUncheckedUpdateWithoutClicksInput>
+}
+
 export type BlockCreateWithoutUserInput = {
   id?: string
   type: string
   title: string
   content?: string | null
+  username?: string | null
   url?: string | null
   color?: string | null
-  size?: string
+  cols?: number
+  rows?: number
   social?: string | null
   position?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  clicks?: Prisma.BlockClickCreateNestedManyWithoutBlockInput
 }
 
 export type BlockUncheckedCreateWithoutUserInput = {
@@ -584,13 +669,16 @@ export type BlockUncheckedCreateWithoutUserInput = {
   type: string
   title: string
   content?: string | null
+  username?: string | null
   url?: string | null
   color?: string | null
-  size?: string
+  cols?: number
+  rows?: number
   social?: string | null
   position?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  clicks?: Prisma.BlockClickUncheckedCreateNestedManyWithoutBlockInput
 }
 
 export type BlockCreateOrConnectWithoutUserInput = {
@@ -628,13 +716,99 @@ export type BlockScalarWhereInput = {
   type?: Prisma.StringFilter<"Block"> | string
   title?: Prisma.StringFilter<"Block"> | string
   content?: Prisma.StringNullableFilter<"Block"> | string | null
+  username?: Prisma.StringNullableFilter<"Block"> | string | null
   url?: Prisma.StringNullableFilter<"Block"> | string | null
   color?: Prisma.StringNullableFilter<"Block"> | string | null
-  size?: Prisma.StringFilter<"Block"> | string
+  cols?: Prisma.IntFilter<"Block"> | number
+  rows?: Prisma.IntFilter<"Block"> | number
   social?: Prisma.StringNullableFilter<"Block"> | string | null
   position?: Prisma.IntFilter<"Block"> | number
   createdAt?: Prisma.DateTimeFilter<"Block"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Block"> | Date | string
+}
+
+export type BlockCreateWithoutClicksInput = {
+  id?: string
+  type: string
+  title: string
+  content?: string | null
+  username?: string | null
+  url?: string | null
+  color?: string | null
+  cols?: number
+  rows?: number
+  social?: string | null
+  position?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutBlocksInput
+}
+
+export type BlockUncheckedCreateWithoutClicksInput = {
+  id?: string
+  userId: string
+  type: string
+  title: string
+  content?: string | null
+  username?: string | null
+  url?: string | null
+  color?: string | null
+  cols?: number
+  rows?: number
+  social?: string | null
+  position?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type BlockCreateOrConnectWithoutClicksInput = {
+  where: Prisma.BlockWhereUniqueInput
+  create: Prisma.XOR<Prisma.BlockCreateWithoutClicksInput, Prisma.BlockUncheckedCreateWithoutClicksInput>
+}
+
+export type BlockUpsertWithoutClicksInput = {
+  update: Prisma.XOR<Prisma.BlockUpdateWithoutClicksInput, Prisma.BlockUncheckedUpdateWithoutClicksInput>
+  create: Prisma.XOR<Prisma.BlockCreateWithoutClicksInput, Prisma.BlockUncheckedCreateWithoutClicksInput>
+  where?: Prisma.BlockWhereInput
+}
+
+export type BlockUpdateToOneWithWhereWithoutClicksInput = {
+  where?: Prisma.BlockWhereInput
+  data: Prisma.XOR<Prisma.BlockUpdateWithoutClicksInput, Prisma.BlockUncheckedUpdateWithoutClicksInput>
+}
+
+export type BlockUpdateWithoutClicksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cols?: Prisma.IntFieldUpdateOperationsInput | number
+  rows?: Prisma.IntFieldUpdateOperationsInput | number
+  social?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutBlocksNestedInput
+}
+
+export type BlockUncheckedUpdateWithoutClicksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cols?: Prisma.IntFieldUpdateOperationsInput | number
+  rows?: Prisma.IntFieldUpdateOperationsInput | number
+  social?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type BlockCreateManyUserInput = {
@@ -642,9 +816,11 @@ export type BlockCreateManyUserInput = {
   type: string
   title: string
   content?: string | null
+  username?: string | null
   url?: string | null
   color?: string | null
-  size?: string
+  cols?: number
+  rows?: number
   social?: string | null
   position?: number
   createdAt?: Date | string
@@ -656,13 +832,16 @@ export type BlockUpdateWithoutUserInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  size?: Prisma.StringFieldUpdateOperationsInput | string
+  cols?: Prisma.IntFieldUpdateOperationsInput | number
+  rows?: Prisma.IntFieldUpdateOperationsInput | number
   social?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   position?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clicks?: Prisma.BlockClickUpdateManyWithoutBlockNestedInput
 }
 
 export type BlockUncheckedUpdateWithoutUserInput = {
@@ -670,13 +849,16 @@ export type BlockUncheckedUpdateWithoutUserInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  size?: Prisma.StringFieldUpdateOperationsInput | string
+  cols?: Prisma.IntFieldUpdateOperationsInput | number
+  rows?: Prisma.IntFieldUpdateOperationsInput | number
   social?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   position?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clicks?: Prisma.BlockClickUncheckedUpdateManyWithoutBlockNestedInput
 }
 
 export type BlockUncheckedUpdateManyWithoutUserInput = {
@@ -684,15 +866,46 @@ export type BlockUncheckedUpdateManyWithoutUserInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  size?: Prisma.StringFieldUpdateOperationsInput | string
+  cols?: Prisma.IntFieldUpdateOperationsInput | number
+  rows?: Prisma.IntFieldUpdateOperationsInput | number
   social?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   position?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+
+/**
+ * Count Type BlockCountOutputType
+ */
+
+export type BlockCountOutputType = {
+  clicks: number
+}
+
+export type BlockCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  clicks?: boolean | BlockCountOutputTypeCountClicksArgs
+}
+
+/**
+ * BlockCountOutputType without action
+ */
+export type BlockCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BlockCountOutputType
+   */
+  select?: Prisma.BlockCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * BlockCountOutputType without action
+ */
+export type BlockCountOutputTypeCountClicksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BlockClickWhereInput
+}
 
 
 export type BlockSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -701,14 +914,18 @@ export type BlockSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   type?: boolean
   title?: boolean
   content?: boolean
+  username?: boolean
   url?: boolean
   color?: boolean
-  size?: boolean
+  cols?: boolean
+  rows?: boolean
   social?: boolean
   position?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  clicks?: boolean | Prisma.Block$clicksArgs<ExtArgs>
+  _count?: boolean | Prisma.BlockCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["block"]>
 
 export type BlockSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -717,9 +934,11 @@ export type BlockSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   type?: boolean
   title?: boolean
   content?: boolean
+  username?: boolean
   url?: boolean
   color?: boolean
-  size?: boolean
+  cols?: boolean
+  rows?: boolean
   social?: boolean
   position?: boolean
   createdAt?: boolean
@@ -733,9 +952,11 @@ export type BlockSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   type?: boolean
   title?: boolean
   content?: boolean
+  username?: boolean
   url?: boolean
   color?: boolean
-  size?: boolean
+  cols?: boolean
+  rows?: boolean
   social?: boolean
   position?: boolean
   createdAt?: boolean
@@ -749,18 +970,22 @@ export type BlockSelectScalar = {
   type?: boolean
   title?: boolean
   content?: boolean
+  username?: boolean
   url?: boolean
   color?: boolean
-  size?: boolean
+  cols?: boolean
+  rows?: boolean
   social?: boolean
   position?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type BlockOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "type" | "title" | "content" | "url" | "color" | "size" | "social" | "position" | "createdAt" | "updatedAt", ExtArgs["result"]["block"]>
+export type BlockOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "type" | "title" | "content" | "username" | "url" | "color" | "cols" | "rows" | "social" | "position" | "createdAt" | "updatedAt", ExtArgs["result"]["block"]>
 export type BlockInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  clicks?: boolean | Prisma.Block$clicksArgs<ExtArgs>
+  _count?: boolean | Prisma.BlockCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type BlockIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -773,6 +998,7 @@ export type $BlockPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   name: "Block"
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
+    clicks: Prisma.$BlockClickPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -780,9 +1006,11 @@ export type $BlockPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     type: string
     title: string
     content: string | null
+    username: string | null
     url: string | null
     color: string | null
-    size: string
+    cols: number
+    rows: number
     social: string | null
     position: number
     createdAt: Date
@@ -1182,6 +1410,7 @@ readonly fields: BlockFieldRefs;
 export interface Prisma__BlockClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  clicks<T extends Prisma.Block$clicksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Block$clicksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlockClickPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1216,9 +1445,11 @@ export interface BlockFieldRefs {
   readonly type: Prisma.FieldRef<"Block", 'String'>
   readonly title: Prisma.FieldRef<"Block", 'String'>
   readonly content: Prisma.FieldRef<"Block", 'String'>
+  readonly username: Prisma.FieldRef<"Block", 'String'>
   readonly url: Prisma.FieldRef<"Block", 'String'>
   readonly color: Prisma.FieldRef<"Block", 'String'>
-  readonly size: Prisma.FieldRef<"Block", 'String'>
+  readonly cols: Prisma.FieldRef<"Block", 'Int'>
+  readonly rows: Prisma.FieldRef<"Block", 'Int'>
   readonly social: Prisma.FieldRef<"Block", 'String'>
   readonly position: Prisma.FieldRef<"Block", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Block", 'DateTime'>
@@ -1616,6 +1847,30 @@ export type BlockDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Limit how many Blocks to delete.
    */
   limit?: number
+}
+
+/**
+ * Block.clicks
+ */
+export type Block$clicksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BlockClick
+   */
+  select?: Prisma.BlockClickSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BlockClick
+   */
+  omit?: Prisma.BlockClickOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BlockClickInclude<ExtArgs> | null
+  where?: Prisma.BlockClickWhereInput
+  orderBy?: Prisma.BlockClickOrderByWithRelationInput | Prisma.BlockClickOrderByWithRelationInput[]
+  cursor?: Prisma.BlockClickWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BlockClickScalarFieldEnum | Prisma.BlockClickScalarFieldEnum[]
 }
 
 /**

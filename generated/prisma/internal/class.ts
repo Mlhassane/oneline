@@ -20,7 +20,7 @@ const config: runtime.GetPrismaClientConfig = {
   "clientVersion": "7.3.0",
   "engineVersion": "9d6ad21cbbceab97458517b147a6a09ff43aa735",
   "activeProvider": "postgresql",
-  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id        String   @id @default(cuid())\n  clerkId   String   @unique\n  email     String   @unique\n  username  String   @unique\n  name      String?\n  bio       String?\n  image     String?\n  blocks    Block[]\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nmodel Block {\n  id        String   @id @default(cuid())\n  userId    String\n  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n  type      String // link, text, social, etc.\n  title     String\n  content   String?\n  url       String?\n  color     String?\n  size      String   @default(\"medium\") // small, medium, large\n  social    String? // instagram, youtube, etc.\n  position  Int      @default(0)\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  @@index([userId])\n}\n",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id        String      @id @default(cuid())\n  clerkId   String      @unique\n  email     String      @unique\n  username  String      @unique\n  name      String?\n  bio       String?\n  image     String?\n  blocks    Block[]\n  visits    PageVisit[]\n  createdAt DateTime    @default(now())\n  updatedAt DateTime    @updatedAt\n}\n\nmodel Block {\n  id        String       @id @default(cuid())\n  userId    String\n  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)\n  type      String // link, text, social, etc.\n  title     String\n  content   String?\n  username  String? // Pour le pseudo social\n  url       String?\n  color     String?\n  cols      Int          @default(2) // 1, 2, ou 4 colonnes\n  rows      Int          @default(1) // 1 ou 2 lignes\n  social    String? // instagram, youtube, etc.\n  position  Int          @default(0)\n  clicks    BlockClick[]\n  createdAt DateTime     @default(now())\n  updatedAt DateTime     @updatedAt\n\n  @@index([userId])\n}\n\nmodel PageVisit {\n  id        String   @id @default(cuid())\n  userId    String\n  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n  createdAt DateTime @default(now())\n\n  @@index([userId])\n}\n\nmodel BlockClick {\n  id        String   @id @default(cuid())\n  blockId   String\n  block     Block    @relation(fields: [blockId], references: [id], onDelete: Cascade)\n  createdAt DateTime @default(now())\n\n  @@index([blockId])\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -28,7 +28,7 @@ const config: runtime.GetPrismaClientConfig = {
   }
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"clerkId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"bio\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"image\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"blocks\",\"kind\":\"object\",\"type\":\"Block\",\"relationName\":\"BlockToUser\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Block\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"BlockToUser\"},{\"name\":\"type\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"content\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"url\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"color\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"size\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"social\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"position\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"clerkId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"bio\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"image\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"blocks\",\"kind\":\"object\",\"type\":\"Block\",\"relationName\":\"BlockToUser\"},{\"name\":\"visits\",\"kind\":\"object\",\"type\":\"PageVisit\",\"relationName\":\"PageVisitToUser\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Block\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"BlockToUser\"},{\"name\":\"type\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"content\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"url\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"color\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"cols\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"rows\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"social\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"position\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"clicks\",\"kind\":\"object\",\"type\":\"BlockClick\",\"relationName\":\"BlockToBlockClick\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"PageVisit\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"PageVisitToUser\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"BlockClick\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"blockId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"block\",\"kind\":\"object\",\"type\":\"Block\",\"relationName\":\"BlockToBlockClick\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 
 async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Module> {
   const { Buffer } = await import('node:buffer')
@@ -195,6 +195,26 @@ export interface PrismaClient<
     * ```
     */
   get block(): Prisma.BlockDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.pageVisit`: Exposes CRUD operations for the **PageVisit** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PageVisits
+    * const pageVisits = await prisma.pageVisit.findMany()
+    * ```
+    */
+  get pageVisit(): Prisma.PageVisitDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.blockClick`: Exposes CRUD operations for the **BlockClick** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more BlockClicks
+    * const blockClicks = await prisma.blockClick.findMany()
+    * ```
+    */
+  get blockClick(): Prisma.BlockClickDelegate<ExtArgs, { omit: OmitOpts }>;
 }
 
 export function getPrismaClientClass(): PrismaClientConstructor {

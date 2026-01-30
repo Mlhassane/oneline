@@ -10,4 +10,6 @@
  */
 export type * from './models/User'
 export type * from './models/Block'
+export type * from './models/PageVisit'
+export type * from './models/BlockClick'
 export type * from './commonInputTypes'

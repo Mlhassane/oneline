@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useState } from 'react';
 import {
     LineChart,
     Line,
@@ -17,60 +18,79 @@ import {
     MousePointer2,
     Eye,
     ArrowUpRight,
-    ArrowDownRight
+    ArrowDownRight,
+    Loader2
 } from "lucide-react"
 import { cn } from "@/lib/utils"
-
-const data = [
-    { name: 'Mon', views: 400, clicks: 240 },
-    { name: 'Tue', views: 300, clicks: 139 },
-    { name: 'Wed', views: 600, clicks: 380 },
-    { name: 'Thu', views: 800, clicks: 390 },
-    { name: 'Fri', views: 500, clicks: 480 },
-    { name: 'Sat', views: 900, clicks: 430 },
-    { name: 'Sun', views: 1100, clicks: 610 },
-];
-
-const stats = [
-    {
-        label: "Total Views",
-        value: "14,284",
-        change: "+12.5%",
-        trend: "up",
-        icon: Eye,
-        color: "text-bento-blue",
-        bg: "bg-bento-blue/10"
-    },
-    {
-        label: "Unique Visitors",
-        value: "8,432",
-        change: "+8.2%",
-        trend: "up",
-        icon: Users,
-        color: "text-bento-green",
-        bg: "bg-bento-green/10"
-    },
-    {
-        label: "Avg. Click Rate",
-        value: "42.8%",
-        change: "-2.4%",
-        trend: "down",
-        icon: MousePointer2,
-        color: "text-bento-pink",
-        bg: "bg-bento-pink/10"
-    },
-    {
-        label: "Conversion",
-        value: "12.4%",
-        change: "+4.1%",
-        trend: "up",
-        icon: TrendingUp,
-        color: "text-bento-orange",
-        bg: "bg-bento-orange/10"
-    },
-]
+import { useAuth } from "@/lib/auth-context"
+import { getAnalyticsData } from "@/lib/actions/analytics"
 
 export default function AnalyticsPage() {
+    const { user } = useAuth()
+    const [data, setData] = useState<any>(null)
+    const [isLoading, setIsLoading] = useState(true)
+
+    useEffect(() => {
+        async function fetchAnalytics() {
+            if (user?.id) {
+                const result = await getAnalyticsData(user.id)
+                setData(result)
+            }
+            setIsLoading(false)
+        }
+
+        fetchAnalytics()
+    }, [user?.id])
+
+    if (isLoading) {
+        return (
+            <div className="flex items-center justify-center min-h-[400px]">
+                <Loader2 className="w-8 h-8 text-bento-green animate-spin" />
+            </div>
+        )
+    }
+
+    if (!data) return null
+
+    const stats = [
+        {
+            label: "Total Visits",
+            value: data.totalVisits.toLocaleString(),
+            change: "+100%", // Mock change for now
+            trend: "up",
+            icon: Eye,
+            color: "text-bento-blue",
+            bg: "bg-bento-blue/10"
+        },
+        {
+            label: "Total Clicks",
+            value: data.totalClicks.toLocaleString(),
+            change: "+100%",
+            trend: "up",
+            icon: MousePointer2,
+            color: "text-bento-green",
+            bg: "bg-bento-green/10"
+        },
+        {
+            label: "Avg. Click Rate",
+            value: `${data.avgClickThroughRate.toFixed(1)}%`,
+            change: "0%",
+            trend: "up",
+            icon: TrendingUp,
+            color: "text-bento-pink",
+            bg: "bg-bento-pink/10"
+        },
+        {
+            label: "Active Blocks",
+            value: data.topBlocks.length.toString(),
+            change: "0%",
+            trend: "up",
+            icon: Users,
+            color: "text-bento-orange",
+            bg: "bg-bento-orange/10"
+        },
+    ]
+
     return (
         <div className="p-4 lg:p-8 min-h-full space-y-8 max-w-7xl mx-auto">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -79,21 +99,8 @@ export default function AnalyticsPage() {
                         Analytics
                     </h1>
                     <p className="text-muted-foreground mt-1">
-                        Track your digital presence performance.
+                        Track your digital presence performance in last 7 days.
                     </p>
-                </div>
-                <div className="flex items-center gap-2 bg-card border border-border p-1 rounded-2xl w-fit">
-                    {['24h', '7d', '30d', 'All'].map((period) => (
-                        <button
-                            key={period}
-                            className={cn(
-                                "px-4 py-1.5 text-xs font-bold rounded-xl transition-all",
-                                period === '7d' ? "bg-foreground text-background shadow-lg" : "text-muted-foreground hover:text-foreground"
-                            )}
-                        >
-                            {period}
-                        </button>
-                    ))}
                 </div>
             </div>
 
@@ -126,37 +133,23 @@ export default function AnalyticsPage() {
                 <div className="lg:col-span-2 bg-card border border-border rounded-3xl p-6 lg:p-8 shadow-sm">
                     <div className="flex items-center justify-between mb-8">
                         <div>
-                            <h2 className="text-lg font-bold tracking-tight">Views & Engagement</h2>
-                            <p className="text-xs text-muted-foreground mt-1">Daily overview of your page performance</p>
-                        </div>
-                        <div className="flex items-center gap-4">
-                            <div className="flex items-center gap-2">
-                                <div className="w-2 h-2 rounded-full bg-bento-blue" />
-                                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Views</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <div className="w-2 h-2 rounded-full bg-bento-green" />
-                                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Clicks</span>
-                            </div>
+                            <h2 className="text-lg font-bold tracking-tight">Profile Visits</h2>
+                            <p className="text-xs text-muted-foreground mt-1">Daily views for the last 7 days</p>
                         </div>
                     </div>
 
                     <div className="h-[350px] w-full mt-4">
                         <ResponsiveContainer width="100%" height="100%">
-                            <AreaChart data={data}>
+                            <AreaChart data={data.chartData}>
                                 <defs>
-                                    <linearGradient id="colorViews" x1="0" y1="0" x2="0" y2="1">
+                                    <linearGradient id="colorVisits" x1="0" y1="0" x2="0" y2="1">
                                         <stop offset="5%" stopColor="var(--bento-blue)" stopOpacity={0.1} />
                                         <stop offset="95%" stopColor="var(--bento-blue)" stopOpacity={0} />
-                                    </linearGradient>
-                                    <linearGradient id="colorClicks" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="5%" stopColor="var(--bento-green)" stopOpacity={0.1} />
-                                        <stop offset="95%" stopColor="var(--bento-green)" stopOpacity={0} />
                                     </linearGradient>
                                 </defs>
                                 <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="rgba(var(--border), 0.1)" />
                                 <XAxis
-                                    dataKey="name"
+                                    dataKey="date"
                                     axisLine={false}
                                     tickLine={false}
                                     tick={{ fontSize: 10, fontWeight: 600, fill: 'var(--muted-foreground)' }}
@@ -178,19 +171,11 @@ export default function AnalyticsPage() {
                                 />
                                 <Area
                                     type="monotone"
-                                    dataKey="views"
+                                    dataKey="visits"
                                     stroke="var(--bento-blue)"
                                     strokeWidth={3}
                                     fillOpacity={1}
-                                    fill="url(#colorViews)"
-                                />
-                                <Area
-                                    type="monotone"
-                                    dataKey="clicks"
-                                    stroke="var(--bento-green)"
-                                    strokeWidth={3}
-                                    fillOpacity={1}
-                                    fill="url(#colorClicks)"
+                                    fill="url(#colorVisits)"
                                 />
                             </AreaChart>
                         </ResponsiveContainer>
@@ -198,36 +183,30 @@ export default function AnalyticsPage() {
                 </div>
 
                 <div className="bg-card border border-border rounded-3xl p-6 lg:p-8 shadow-sm flex flex-col">
-                    <h2 className="text-lg font-bold tracking-tight mb-6">Top Referrers</h2>
-                    <div className="space-y-6 flex-1">
-                        {[
-                            { name: 'Instagram', value: '4,284', percent: 45, color: 'bg-pink-500' },
-                            { name: 'Twitter', value: '2,932', percent: 32, color: 'bg-sky-500' },
-                            { name: 'Direct', value: '1,432', percent: 18, color: 'bg-gray-400' },
-                            { name: 'YouTube', value: '843', percent: 5, color: 'bg-red-500' },
-                        ].map((ref) => (
-                            <div key={ref.name} className="space-y-2">
+                    <h2 className="text-lg font-bold tracking-tight mb-6">Top Performing Blocks</h2>
+                    <div className="space-y-6 flex-1 overflow-y-auto max-h-[400px] pr-2 custom-scrollbar">
+                        {data.topBlocks.slice(0, 5).map((block: any) => (
+                            <div key={block.id} className="space-y-2">
                                 <div className="flex items-center justify-between text-xs font-bold">
-                                    <span className="text-foreground">{ref.name}</span>
-                                    <span className="text-muted-foreground">{ref.value}</span>
+                                    <span className="text-foreground truncate max-w-[150px]">{block.title}</span>
+                                    <span className="text-muted-foreground">{block.clicks} clicks</span>
                                 </div>
                                 <div className="h-2 w-full bg-secondary rounded-full overflow-hidden">
                                     <div
-                                        className={cn("h-full rounded-full", ref.color)}
-                                        style={{ width: `${ref.percent}%` }}
+                                        className={cn("h-full rounded-full bg-bento-green")}
+                                        style={{ width: `${data.totalClicks > 0 ? (block.clicks / data.totalClicks) * 100 : 0}%` }}
                                     />
                                 </div>
                             </div>
                         ))}
-                    </div>
-                    <div className="mt-8 pt-6 border-t border-border">
-                        <button className="w-full h-12 rounded-2xl border-2 border-dashed border-border text-xs font-bold text-muted-foreground hover:border-bento-green/40 hover:text-bento-green transition-all">
-                            Export Detailed Report
-                        </button>
+                        {data.topBlocks.length === 0 && (
+                            <p className="text-sm text-muted-foreground text-center py-8">
+                                No click data yet.
+                            </p>
+                        )}
                     </div>
                 </div>
             </div>
         </div>
     )
 }
-

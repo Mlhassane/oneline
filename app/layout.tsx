@@ -4,6 +4,8 @@ import { DM_Sans } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { ClerkProvider } from '@clerk/nextjs'
 import { Toaster } from "@/components/ui/sonner"
+import { ThemeProvider } from "@/components/theme-provider"
+import { LanguageProvider } from "@/lib/language-context"
 import './globals.css'
 
 const _dmSans = DM_Sans({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800", "900"] });
@@ -38,13 +40,21 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning>
         <body className={`${_dmSans.className} antialiased`}>
-          {children}
-          <Toaster position="top-right" richColors />
+          <LanguageProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+              <Toaster position="top-right" richColors />
+            </ThemeProvider>
+          </LanguageProvider>
         </body>
       </html>
     </ClerkProvider>
   )
 }
-

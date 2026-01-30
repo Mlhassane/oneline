@@ -385,7 +385,9 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   User: 'User',
-  Block: 'Block'
+  Block: 'Block',
+  PageVisit: 'PageVisit',
+  BlockClick: 'BlockClick'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -401,7 +403,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "block"
+    modelProps: "user" | "block" | "pageVisit" | "blockClick"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -553,6 +555,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    PageVisit: {
+      payload: Prisma.$PageVisitPayload<ExtArgs>
+      fields: Prisma.PageVisitFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PageVisitFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageVisitPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PageVisitFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageVisitPayload>
+        }
+        findFirst: {
+          args: Prisma.PageVisitFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageVisitPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PageVisitFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageVisitPayload>
+        }
+        findMany: {
+          args: Prisma.PageVisitFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageVisitPayload>[]
+        }
+        create: {
+          args: Prisma.PageVisitCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageVisitPayload>
+        }
+        createMany: {
+          args: Prisma.PageVisitCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PageVisitCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageVisitPayload>[]
+        }
+        delete: {
+          args: Prisma.PageVisitDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageVisitPayload>
+        }
+        update: {
+          args: Prisma.PageVisitUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageVisitPayload>
+        }
+        deleteMany: {
+          args: Prisma.PageVisitDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PageVisitUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PageVisitUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageVisitPayload>[]
+        }
+        upsert: {
+          args: Prisma.PageVisitUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageVisitPayload>
+        }
+        aggregate: {
+          args: Prisma.PageVisitAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePageVisit>
+        }
+        groupBy: {
+          args: Prisma.PageVisitGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PageVisitGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PageVisitCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PageVisitCountAggregateOutputType> | number
+        }
+      }
+    }
+    BlockClick: {
+      payload: Prisma.$BlockClickPayload<ExtArgs>
+      fields: Prisma.BlockClickFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BlockClickFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockClickPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BlockClickFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockClickPayload>
+        }
+        findFirst: {
+          args: Prisma.BlockClickFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockClickPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BlockClickFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockClickPayload>
+        }
+        findMany: {
+          args: Prisma.BlockClickFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockClickPayload>[]
+        }
+        create: {
+          args: Prisma.BlockClickCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockClickPayload>
+        }
+        createMany: {
+          args: Prisma.BlockClickCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BlockClickCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockClickPayload>[]
+        }
+        delete: {
+          args: Prisma.BlockClickDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockClickPayload>
+        }
+        update: {
+          args: Prisma.BlockClickUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockClickPayload>
+        }
+        deleteMany: {
+          args: Prisma.BlockClickDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BlockClickUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BlockClickUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockClickPayload>[]
+        }
+        upsert: {
+          args: Prisma.BlockClickUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockClickPayload>
+        }
+        aggregate: {
+          args: Prisma.BlockClickAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBlockClick>
+        }
+        groupBy: {
+          args: Prisma.BlockClickGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BlockClickGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BlockClickCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BlockClickCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -613,9 +763,11 @@ export const BlockScalarFieldEnum = {
   type: 'type',
   title: 'title',
   content: 'content',
+  username: 'username',
   url: 'url',
   color: 'color',
-  size: 'size',
+  cols: 'cols',
+  rows: 'rows',
   social: 'social',
   position: 'position',
   createdAt: 'createdAt',
@@ -623,6 +775,24 @@ export const BlockScalarFieldEnum = {
 } as const
 
 export type BlockScalarFieldEnum = (typeof BlockScalarFieldEnum)[keyof typeof BlockScalarFieldEnum]
+
+
+export const PageVisitScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type PageVisitScalarFieldEnum = (typeof PageVisitScalarFieldEnum)[keyof typeof PageVisitScalarFieldEnum]
+
+
+export const BlockClickScalarFieldEnum = {
+  id: 'id',
+  blockId: 'blockId',
+  createdAt: 'createdAt'
+} as const
+
+export type BlockClickScalarFieldEnum = (typeof BlockClickScalarFieldEnum)[keyof typeof BlockClickScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -807,6 +977,8 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   block?: Prisma.BlockOmit
+  pageVisit?: Prisma.PageVisitOmit
+  blockClick?: Prisma.BlockClickOmit
 }
 
 /* Types for Logging */
