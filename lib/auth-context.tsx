@@ -11,6 +11,8 @@ export interface User {
   username: string
   image?: string
   bio?: string
+  seoTitle?: string
+  seoDescription?: string
 }
 
 interface AuthContextType {
@@ -41,6 +43,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               username: synced.username,
               image: synced.image || undefined,
               bio: synced.bio || undefined,
+              seoTitle: synced.seoTitle || undefined,
+              seoDescription: synced.seoDescription || undefined,
             })
           }
         } catch (error) {

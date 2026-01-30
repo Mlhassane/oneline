@@ -643,6 +643,66 @@ export function detectPlatform(url: string): PlatformMatch | null {
 
     return null
 }
+
+export function getYoutubeThumbnail(url: string): string | null {
+    if (!url) return null
+    const lowercaseUrl = url.toLowerCase()
+    let videoId = ""
+    
+    if (lowercaseUrl.includes("youtu.be/")) {
+        videoId = url.split("youtu.be/")[1]?.split("?")[0]
+    } else if (lowercaseUrl.includes("v=")) {
+        videoId = url.split("v=")[1]?.split("&")[0]
+    } else if (lowercaseUrl.includes("embed/")) {
+        videoId = url.split("embed/")[1]?.split("?")[0]
+    } else if (lowercaseUrl.includes("shorts/")) {
+        videoId = url.split("shorts/")[1]?.split("?")[0]
+    }
+
+    return videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : null
+}
+
+export function getEmbedUrl(url: string, type: string, social?: string): string | null {
+    if (!url) return null
+    const lowercaseUrl = url.toLowerCase()
+
+    try {
+        if (social === "youtube" || lowercaseUrl.includes("youtube.com") || lowercaseUrl.includes("youtu.be")) {
+            let videoId = ""
+            if (lowercaseUrl.includes("youtu.be/")) {
+                videoId = url.split("youtu.be/")[1]?.split("?")[0]
+            } else if (lowercaseUrl.includes("v=")) {
+                videoId = url.split("v=")[1]?.split("&")[0]
+            } else if (lowercaseUrl.includes("embed/")) {
+                videoId = url.split("embed/")[1]?.split("?")[0]
+            } else if (lowercaseUrl.includes("shorts/")) {
+                videoId = url.split("shorts/")[1]?.split("?")[0]
+            }
+            return videoId ? `https://www.youtube.com/embed/${videoId}` : null
+        }
+
+        if (social === "spotify" || lowercaseUrl.includes("spotify.com")) {
+            const parts = url.split("spotify.com/")[1]?.split("?")[0]
+            return parts ? `https://open.spotify.com/embed/${parts}` : null
+        }
+
+        if (social === "tiktok" || lowercaseUrl.includes("tiktok.com")) {
+            // TikTok embeds are usually more complex but we can try the basic video embed
+            const videoId = url.split("/video/")[1]?.split("?")[0]
+            return videoId ? `https://www.tiktok.com/embed/v2/${videoId}` : null
+        }
+
+        if (social === "vimeo" || lowercaseUrl.includes("vimeo.com")) {
+            const videoId = url.split("vimeo.com/")[1]?.split("?")[0]
+            return videoId ? `https://player.vimeo.com/video/${videoId}` : null
+        }
+    } catch (e) {
+        return null
+    }
+
+    return null
+}
+
 // Fonction utilitaire pour tester plusieurs URLs
 export function detectPlatforms(urls: string[]): (PlatformMatch | null)[] {
     return urls.map(url => detectPlatform(url))

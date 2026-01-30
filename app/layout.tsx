@@ -1,5 +1,6 @@
 import React from "react"
 import type { Metadata } from 'next'
+import { cookies, headers } from 'next/headers'
 import { DM_Sans } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { ClerkProvider } from '@clerk/nextjs'
@@ -33,16 +34,32 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const cookieStore = await cookies()
+  const headersList = await headers()
+
+  let language = "en"
+  const cookieLang = cookieStore.get("language")?.value
+
+  if (cookieLang === "fr" || cookieLang === "en") {
+    language = cookieLang
+  } else {
+    // Detect from header
+    const acceptLanguage = headersList.get("accept-language")
+    if (acceptLanguage?.startsWith("fr")) {
+      language = "fr"
+    }
+  }
+
   return (
     <ClerkProvider>
-      <html lang="en" suppressHydrationWarning>
+      <html lang={language} suppressHydrationWarning>
         <body className={`${_dmSans.className} antialiased`}>
-          <LanguageProvider>
+          <LanguageProvider defaultLanguage={language as "en" | "fr"}>
             <ThemeProvider
               attribute="class"
               defaultTheme="system"

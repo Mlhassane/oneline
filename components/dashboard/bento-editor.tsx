@@ -41,8 +41,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { detectPlatform } from "@/lib/platform-detector"
+import { detectPlatform, getEmbedUrl, getYoutubeThumbnail } from "@/lib/platform-detector"
 import { uploadImageAction } from "@/lib/actions/upload"
+import { updateUserAction } from "@/lib/actions/user"
 import { Loader2, Upload } from "lucide-react"
 
 
@@ -213,96 +214,140 @@ function SortableBlock({
 
       {/* Block Content */}
       <div className="h-full flex flex-col justify-between relative z-0">
-        {/* Social Block Layout */}
-        {isSocial && SocialIcon ? (
-          <>
-            <div className="flex items-start justify-between">
-              <SocialIcon className="w-8 h-8 text-white drop-shadow-md" />
-            </div>
+        {(() => {
+          const embedUrl = block.url ? getEmbedUrl(block.url, block.type, block.social || undefined) : null
+          const hasEmbed = !!embedUrl && (block.cols >= 2 || block.rows >= 2)
+          
+          if (hasEmbed) {
+            const youtubeThumb = block.url ? getYoutubeThumbnail(block.url) : null
+            return (
+              <div className="absolute inset-0 z-0 rounded-4xl overflow-hidden group">
+                <div className="absolute inset-0 z-10 bg-transparent" />
+                {youtubeThumb ? (
+                  <>
+                    <img
+                      src={youtubeThumb}
+                      alt=""
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
+                    <div className="absolute inset-0 flex items-center justify-center opacity-80 group-hover:opacity-100 transition-opacity">
+                      <div className="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center text-white shadow-lg scale-90 group-hover:scale-100 transition-transform">
+                        <Youtube className="w-5 h-5 fill-current" />
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <iframe 
+                    src={embedUrl} 
+                    className="w-full h-full border-0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                  />
+                )}
+              </div>
+            )
+          }
 
-            <div className="mt-auto">
-              {block.username && (
-                <p className="text-[11px] font-bold text-white/90 mb-0.5 tracking-wide">
-                  {block.username}
-                </p>
+          return (
+            <>
+              {/* Social Block Layout */}
+              {isSocial && SocialIcon ? (
+                <>
+                  <div className="flex items-start justify-between">
+                    <SocialIcon className="w-8 h-8 text-white drop-shadow-md" />
+                  </div>
+
+                  <div className="mt-auto">
+                    {block.username && (
+                      <p className="text-[11px] font-bold text-white/90 mb-0.5 tracking-wide">
+                        {block.username}
+                      </p>
+                    )}
+                    {block.title && !block.username && (
+                      <p className="text-[11px] font-bold text-white/90 mb-0.5 tracking-wide">
+                        {block.title}
+                      </p>
+                    )}
+                  </div>
+                </>
+              ) : (
+                /* Standard Block Layout */
+                <>
+                  <div>
+                    {block.title && (
+                      <h3 className={cn(
+                        "font-bold text-sm mb-1.5 tracking-tight",
+                        block.type === "image" ? "text-white" : "text-foreground"
+                      )}>
+                        {block.title}
+                      </h3>
+                    )}
+                    {block.content && (
+                      <p className={cn(
+                        "text-[11px] leading-relaxed line-clamp-3 font-medium opacity-80",
+                        block.type === "image" ? "text-white/90" : "text-muted-foreground"
+                      )}>
+                        {block.content}
+                      </p>
+                    )}
+                  </div>
+                  <div className="mt-auto text-foreground/60 group-hover:text-foreground transition-colors overflow-hidden">
+                    {block.type === "music" && !SocialIcon && (
+                      <div className="flex items-center gap-2.5 bg-background/40 backdrop-blur-sm w-fit px-2.5 py-1 rounded-full border border-white/5">
+                        <div className="w-1.5 h-1.5 bg-bento-green rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
+                        <span className="text-[10px] font-bold text-foreground">LIVE</span>
+                      </div>
+                    )}
+                    {block.type === "music" && SocialIcon && (
+                      <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center border border-white/10">
+                        <SocialIcon className="w-4 h-4 text-white" />
+                      </div>
+                    )}
+                    {block.type === "map" && (
+                      <div className="w-8 h-8 rounded-full bg-bento-orange/20 flex items-center justify-center border border-bento-orange/10">
+                        <MapPin className="w-4 h-4 text-bento-orange" />
+                      </div>
+                    )}
+                    {block.type === "link" && (
+                      <div className="w-8 h-8 rounded-full bg-bento-blue/20 flex items-center justify-center border border-bento-blue/10">
+                        <Link2 className="w-4 h-4 text-bento-blue" />
+                      </div>
+                    )}
+                    {block.type === "image" && (
+                      <div className={cn(
+                        "w-8 h-8 rounded-full flex items-center justify-center border overflow-hidden",
+                        block.url ? "bg-white/20 border-white/10" : "bg-bento-pink/20 border-bento-pink/10"
+                      )}>
+                        {block.url ? (
+                          <img src={block.url} alt="" className="w-full h-full object-cover" />
+                        ) : (
+                          <ImageIcon className="w-4 h-4 text-bento-pink" />
+                        )}
+                      </div>
+                    )}
+                    {block.type === "social" && block.social === "drive" && SocialIcon && (
+                      <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center border border-white/10">
+                        <SocialIcon className="w-4 h-4 text-white" />
+                      </div>
+                    )}
+                    {block.type === "video" && (
+                      <div className="w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center border border-red-500/10">
+                        <Video className="w-4 h-4 text-red-500" />
+                      </div>
+                    )}
+                  </div>
+                </>
               )}
-              {block.title && !block.username && (
-                <p className="text-[11px] font-bold text-white/90 mb-0.5 tracking-wide">
-                  {block.title}
-                </p>
-              )}
-            </div>
-          </>
-        ) : (
-          /* Standard Block Layout */
-          <>
-            <div>
-              {block.title && (
-                <h3 className={cn(
-                  "font-bold text-sm mb-1.5 tracking-tight",
-                  block.type === "image" ? "text-white" : "text-foreground"
-                )}>
-                  {block.title}
-                </h3>
-              )}
-              {block.content && (
-                <p className={cn(
-                  "text-[11px] leading-relaxed line-clamp-3 font-medium opacity-80",
-                  block.type === "image" ? "text-white/90" : "text-muted-foreground"
-                )}>
-                  {block.content}
-                </p>
-              )}
-            </div>
-            <div className="mt-auto text-foreground/60 group-hover:text-foreground transition-colors">
-              {block.type === "music" && !SocialIcon && (
-                <div className="flex items-center gap-2.5 bg-background/40 backdrop-blur-sm w-fit px-2.5 py-1 rounded-full border border-white/5">
-                  <div className="w-1.5 h-1.5 bg-bento-green rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
-                  <span className="text-[10px] font-bold text-foreground">LIVE</span>
-                </div>
-              )}
-              {block.type === "music" && SocialIcon && (
-                <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center border border-white/10">
-                  <SocialIcon className="w-4 h-4 text-white" />
-                </div>
-              )}
-              {block.type === "map" && (
-                <div className="w-8 h-8 rounded-full bg-bento-orange/20 flex items-center justify-center border border-bento-orange/10">
-                  <MapPin className="w-4 h-4 text-bento-orange" />
-                </div>
-              )}
-              {block.type === "link" && (
-                <div className="w-8 h-8 rounded-full bg-bento-blue/20 flex items-center justify-center border border-bento-blue/10">
-                  <Link2 className="w-4 h-4 text-bento-blue" />
-                </div>
-              )}
-              {block.type === "image" && (
-                <div className={cn(
-                  "w-8 h-8 rounded-full flex items-center justify-center border overflow-hidden",
-                  block.url ? "bg-white/20 border-white/10" : "bg-bento-pink/20 border-bento-pink/10"
-                )}>
-                  {block.url ? (
-                    <img src={block.url} alt="" className="w-full h-full object-cover" />
-                  ) : (
-                    <ImageIcon className="w-4 h-4 text-bento-pink" />
-                  )}
-                </div>
-              )}
-              {block.type === "social" && block.social === "drive" && SocialIcon && (
-                <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center border border-white/10">
-                  <SocialIcon className="w-4 h-4 text-white" />
-                </div>
-              )}
-            </div>
-          </>
-        )}
+            </>
+          )
+        })()}
       </div>
     </div>
   )
 }
 
 export function BentoEditor() {
-  const { user } = useAuth()
+  const { user, updateUser } = useAuth()
   const { blocks, addBlock, updateBlock, deleteBlock, setBlocks } = useBlocks()
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null)
   const [hoveredBlockId, setHoveredBlockId] = useState<string | null>(null)
@@ -335,18 +380,17 @@ export function BentoEditor() {
   const handleUrlChange = (url: string) => {
     if (!selectedBlock) return
 
+    updateBlock(selectedBlock.id, { url })
+
     const platform = detectPlatform(url)
     if (platform) {
       updateBlock(selectedBlock.id, {
-        url,
-        type: platform.type as BentoBlock["type"],
+        type: (platform.type === "storage" ? "link" : platform.type) as BentoBlock["type"],
         social: platform.social,
         title: selectedBlock.title === `New ${selectedBlock.type}` ? platform.title : selectedBlock.title,
         color: selectedBlock.color === "bg-card" ? platform.color : selectedBlock.color,
         username: platform.username,
       })
-    } else {
-      updateBlock(selectedBlock.id, { url })
     }
   }
 
@@ -368,6 +412,31 @@ export function BentoEditor() {
       if (result.success && result.url) {
         updateBlock(selectedBlockId, { url: result.url })
         toast.success("Image uploaded successfully")
+      } else {
+        toast.error(result.error || "Failed to upload image")
+      }
+    } catch (error) {
+      toast.error("An error occurred during upload")
+    } finally {
+      setIsUploading(false)
+    }
+  }
+
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!user || !e.target.files?.[0]) return
+
+    setIsUploading(true)
+    const formData = new FormData()
+    formData.append("file", e.target.files[0])
+
+    try {
+      const result = await uploadImageAction(formData)
+      if (result.success && result.url) {
+        const updateResult = await updateUserAction(user.id, { image: result.url })
+        if (updateResult.success) {
+          updateUser({ image: result.url })
+          toast.success("Profile picture updated")
+        }
       } else {
         toast.error(result.error || "Failed to upload image")
       }
@@ -415,15 +484,33 @@ export function BentoEditor() {
         <div className="mb-12 text-center group">
           {/* ... user preview ... */}
           <div className="relative inline-block mb-6">
-            <div className="w-28 h-28 rounded-full bg-linear-to-br from-bento-green to-bento-blue flex items-center justify-center text-background text-4xl font-black shadow-xl ring-4 ring-background">
-              {user?.name?.[0]?.toUpperCase() || "U"}
+            {user?.image ? (
+              <img
+                src={user.image}
+                alt={user.name || ""}
+                className="w-28 h-28 rounded-full shadow-xl ring-4 ring-background object-cover"
+              />
+            ) : (
+              <div className="w-28 h-28 rounded-full bg-linear-to-br from-bento-green to-bento-blue flex items-center justify-center text-background text-4xl font-black shadow-xl ring-4 ring-background">
+                {user?.name?.[0]?.toUpperCase() || "U"}
+              </div>
+            )}
+            <div className="absolute -bottom-1 -right-1">
+              <input
+                type="file"
+                id="avatar-upload"
+                className="hidden"
+                accept="image/*"
+                onChange={handleAvatarUpload}
+                disabled={isUploading}
+              />
+              <label
+                htmlFor="avatar-upload"
+                className="w-10 h-10 bg-card border border-border rounded-full flex items-center justify-center text-muted-foreground hover:text-bento-green hover:border-bento-green hover:shadow-lg transition-all duration-300 cursor-pointer"
+              >
+                {isUploading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Edit3 className="w-5 h-5" />}
+              </label>
             </div>
-            <button
-              type="button"
-              className="absolute -bottom-1 -right-1 w-10 h-10 bg-card border border-border rounded-full flex items-center justify-center text-muted-foreground hover:text-bento-green hover:border-bento-green hover:shadow-lg transition-all duration-300"
-            >
-              <Edit3 className="w-5 h-5" />
-            </button>
           </div>
           <h1 className="text-3xl font-black text-foreground mb-2">{user?.name || "Your Name"}</h1>
           <p className="text-muted-foreground font-medium">@{user?.username || "username"}</p>
@@ -689,14 +776,52 @@ export function BentoEditor() {
             </div>
           </div>
         ) : (
-          <div className="p-12 h-full flex flex-col items-center justify-center text-center">
-            <div className="w-16 h-16 rounded-[2rem] bg-secondary flex items-center justify-center mb-6 text-muted-foreground/30">
-              <Edit3 className="w-8 h-8" />
+          <div className="p-8 h-full flex flex-col overflow-y-auto custom-scrollbar">
+            <div className="flex flex-col items-center justify-center text-center mb-10 mt-4">
+              <div className="w-16 h-16 rounded-[2rem] bg-secondary flex items-center justify-center mb-6 text-muted-foreground/30">
+                <Edit3 className="w-8 h-8" />
+              </div>
+              <h3 className="text-sm font-bold text-foreground mb-2">Editor Ready</h3>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Select any block in the grid to customize its content and appearance.
+              </p>
             </div>
-            <h3 className="text-sm font-bold text-foreground mb-2">Editor Ready</h3>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              Select any block in the grid to customize its content and appearance.
-            </p>
+
+            <div className="space-y-8 border-t border-border pt-8">
+              <div>
+                <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground mb-6">Page SEO & Social</h3>
+
+                <div className="space-y-6">
+                  <div className="space-y-2.5">
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground px-1">SEO Title</Label>
+                    <Input
+                      value={user?.seoTitle || ""}
+                      onChange={(e) => {
+                        const val = e.target.value
+                        updateUser({ seoTitle: val })
+                        updateUserAction(user!.id, { seoTitle: val })
+                      }}
+                      placeholder="e.g. My Awesome Portfolio"
+                      className="rounded-2xl bg-secondary/50 border-none h-12 px-4 font-medium"
+                    />
+                  </div>
+
+                  <div className="space-y-2.5">
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground px-1">SEO Description</Label>
+                    <Textarea
+                      value={user?.seoDescription || ""}
+                      onChange={(e) => {
+                        const val = e.target.value
+                        updateUser({ seoDescription: val })
+                        updateUserAction(user!.id, { seoDescription: val })
+                      }}
+                      placeholder="Brief description for search engines and social media..."
+                      className="rounded-2xl bg-secondary/50 border-none min-h-[100px] p-4 font-medium leading-relaxed"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>

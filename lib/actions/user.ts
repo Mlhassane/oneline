@@ -15,7 +15,7 @@ export async function syncUser() {
         update: {
             email: user.emailAddresses[0].emailAddress,
             name: `${user.firstName || ""} ${user.lastName || ""}`.trim(),
-            image: user.imageUrl,
+            // Don't overwrite image here to allow custom uploads
         },
         create: {
             clerkId: user.id,
@@ -29,7 +29,7 @@ export async function syncUser() {
     return dbUser
 }
 
-export async function updateUserAction(id: string, data: { name?: string, username?: string, bio?: string }) {
+export async function updateUserAction(id: string, data: { name?: string, username?: string, bio?: string, image?: string, seoTitle?: string, seoDescription?: string }) {
     try {
         // Check if username is taken by another user
         if (data.username) {

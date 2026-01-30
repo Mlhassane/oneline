@@ -6,7 +6,11 @@ import { ArrowRight, Sparkles } from "lucide-react"
 import Link from "next/link"
 
 
+import { useLanguage } from "@/lib/language-context"
+
 export function Hero() {
+  const { t } = useLanguage()
+  
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center px-4 py-20 pt-32 overflow-hidden">
 
@@ -48,18 +52,15 @@ export function Hero() {
         </div>
 
         <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-foreground leading-tight tracking-tight mb-6">
-          <span className="block opacity-0 animate-fade-in-up animation-delay-100">All your</span>
-          <span className="relative inline-block opacity-0 animate-fade-in-up animation-delay-200">
-            <span className="relative z-10 bg-clip-text text-transparent bg-linear-to-r from-bento-green via-bento-blue to-bento-pink animate-gradient">
-              links
-            </span>
+          <span className="block opacity-0 animate-fade-in-up animation-delay-100">
+             <span className="bg-clip-text text-transparent bg-linear-to-r from-bento-green via-bento-blue to-bento-pink animate-gradient pb-2">
+               {t("hero.title")}
+             </span>
           </span>
-          <span className="block opacity-0 animate-fade-in-up animation-delay-300">& content</span>
-          <span className="block text-muted-foreground opacity-0 animate-fade-in-up animation-delay-400">on one beautiful page</span>
         </h1>
 
         <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed opacity-0 animate-fade-in-up animation-delay-500">
-          Show your audience everything you are, create and sell in one place.
+          {t("hero.subtitle")}
         </p>
       </div>
 
@@ -69,7 +70,7 @@ export function Hero() {
           <Button
             className="w-full h-14 px-8 bg-bento-green hover:bg-bento-green/90 text-background font-semibold rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-bento-green/25 group"
           >
-            Get Started for Free
+            {t("hero.cta")}
             <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
           </Button>
         </Link>
@@ -78,9 +79,9 @@ export function Hero() {
       {/* Already have access link with animation */}
       <div className="text-center text-muted-foreground opacity-0 animate-fade-in-up animation-delay-700">
         <p className="text-sm">
-          Already using Onene?{" "}
+          {t("hero.alreadyUser")}{" "}
           <Link href="/login" className="text-foreground underline hover:text-bento-green transition-colors duration-300">
-            Log in
+            {t("nav.login")}
           </Link>
         </p>
       </div>

@@ -7,17 +7,19 @@ import { cn } from "@/lib/utils"
 import Link from "next/link"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { LanguageToggle } from "@/components/language-toggle"
-
-const navLinks = [
-  { label: "Features", href: "#features" },
-  { label: "Pricing", href: "#pricing" },
-  { label: "Creators", href: "#creators" },
-  { label: "Examples", href: "#examples" },
-]
+import { useLanguage } from "@/lib/language-context"
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const { t } = useLanguage()
+
+  const navLinks = [
+    { label: t("nav.features"), href: "#features" },
+    { label: t("nav.pricing"), href: "#pricing" },
+    { label: t("nav.creators"), href: "#creators" },
+    { label: t("nav.examples"), href: "#examples" },
+  ]
 
   useEffect(() => {
     const handleScroll = () => {
@@ -95,14 +97,14 @@ export function Navbar() {
                   variant="ghost"
                   className="text-muted-foreground hover:text-foreground hover:bg-secondary/50 transition-all duration-300 rounded-full px-5"
                 >
-                  Log in
+                  {t("nav.login")}
                 </Button>
               </Link>
               <Link href="/signup">
                 <Button className="relative bg-linear-to-r from-bento-green to-bento-blue hover:from-bento-green hover:to-bento-green text-background font-semibold rounded-full px-5 transition-all duration-500 hover:scale-105 hover:shadow-xl hover:shadow-bento-green/30 group overflow-hidden">
                   <span className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                   <Sparkles className="w-4 h-4 mr-2 transition-transform group-hover:rotate-12" />
-                  <span className="relative">Get Started</span>
+                  <span className="relative">{t("nav.getStarted")}</span>
                 </Button>
               </Link>
             </div>
@@ -167,7 +169,7 @@ export function Navbar() {
                 className="text-muted-foreground text-xl w-full"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Log in
+                {t("nav.login")}
               </Button>
             </Link>
             <Link href="/signup" className="w-full">
@@ -175,7 +177,7 @@ export function Navbar() {
                 className="bg-bento-green hover:bg-bento-green/90 text-background font-semibold rounded-xl px-8 py-6 text-lg w-full"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Get Started
+                {t("nav.getStarted")}
               </Button>
             </Link>
           </div>

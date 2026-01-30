@@ -14,11 +14,13 @@ model User {
   username  String      @unique
   name      String?
   bio       String?
-  image     String?
-  blocks    Block[]
-  visits    PageVisit[]
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  image          String?
+  seoTitle       String?
+  seoDescription String?
+  blocks         Block[]
+  visits         PageVisit[]
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
 }
 
 model Block {
