@@ -1,13 +1,14 @@
 "use client"
 
 import React from "react"
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ArrowRight } from "lucide-react"
+import { useLanguage } from "@/lib/language-context"
 
 export function Footer() {
+  const { t } = useLanguage()
   const [email, setEmail] = useState("")
   const [submitted, setSubmitted] = useState(false)
 
@@ -28,7 +29,7 @@ export function Footer() {
               <div className="flex flex-col sm:flex-row gap-3">
                 <Input
                   type="email"
-                  placeholder="Email Address"
+                  placeholder={t("media.footer.emailPlaceholder")}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="flex-1 h-14 px-6 text-base bg-card border-border rounded-2xl text-foreground placeholder:text-muted-foreground focus-visible:ring-bento-green"
@@ -37,13 +38,13 @@ export function Footer() {
                   type="submit"
                   className="h-14 px-8 bg-bento-green hover:bg-bento-green/90 text-background font-semibold rounded-2xl transition-all hover:scale-105"
                 >
-                  Get Started
+                  {t("nav.getStarted")}
                   <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
               </div>
             ) : (
               <div className="text-center p-6 bg-bento-green/10 rounded-2xl border border-bento-green/20">
-                <p className="text-bento-green font-semibold">{"You're on the waitlist!"}</p>
+                <p className="text-bento-green font-semibold">{t("media.footer.waitlist")}</p>
               </div>
             )}
           </form>
@@ -57,26 +58,26 @@ export function Footer() {
               <span className="text-background font-bold text-sm">B</span>
             </div>
             <span className="text-sm text-muted-foreground">
-              Designed in Berlin. Built for Creatives.
+              {t("media.footer.designed")}
             </span>
           </div>
 
           {/* Navigation links */}
           <nav className="flex flex-wrap items-center justify-center gap-6">
             <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              Log In
+              {t("nav.login")}
             </a>
             <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              About us
+              {t("media.footer.about")}
             </a>
             <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              Changelog
+              {t("media.footer.changelog")}
             </a>
             <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              Explore
+              {t("media.footer.explore")}
             </a>
             <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              Brand Assets
+              {t("media.footer.assets")}
             </a>
           </nav>
         </div>

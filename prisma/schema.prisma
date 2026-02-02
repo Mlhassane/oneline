@@ -1,6 +1,5 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -17,6 +16,7 @@ model User {
   image          String?
   seoTitle       String?
   seoDescription String?
+  theme          String      @default("modern")
   blocks         Block[]
   visits         PageVisit[]
   createdAt      DateTime    @default(now())

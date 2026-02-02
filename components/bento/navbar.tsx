@@ -34,27 +34,27 @@ export function Navbar() {
       <nav
         className={cn(
           "fixed top-4 left-1/2 -translate-x-1/2 z-50 transition-all duration-700 ease-out",
-          isScrolled ? "w-[95%] max-w-4xl" : "w-[95%] max-w-5xl"
+          isScrolled ? "w-[95%] max-w-4xl" : "w-[95%] max-w-7xl "
         )}
       >
         {/* Glowing background effect */}
-        <div className="absolute inset-0 rounded-[28px] bg-linear-to-r from-bento-green/20 via-bento-blue/20 to-bento-pink/20 blur-xl opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+        <div className="absolute inset-0 rounded-full bg-linear-to-r from-bento-green/20 via-bento-blue/20 to-bento-pink/20 blur-xl opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
         {/* Main navbar container with glass effect */}
         <div
           className={cn(
-            "relative rounded-[28px] border transition-all duration-500",
+            "relative rounded-full border transition-all duration-500",
             isScrolled
               ? "bg-card/60 backdrop-blur-2xl border-border/50 shadow-2xl shadow-background/50"
               : "bg-card/40 backdrop-blur-xl border-border/30"
           )}
         >
           {/* Inner glow effect */}
-          <div className="absolute inset-[1px] rounded-[27px] bg-gradient-to-b from-white/[0.08] to-transparent pointer-events-none" />
+          <div className="absolute inset-px rounded-full bg-linear-to-b from-white/8 to-transparent pointer-events-none" />
 
           {/* Animated border gradient */}
-          <div className="absolute inset-0 rounded-[28px] overflow-hidden pointer-events-none">
-            <div className="absolute inset-[-100%] bg-[conic-gradient(from_0deg,transparent,transparent_40%,var(--bento-green)_50%,transparent_60%,transparent)] animate-spin-slow opacity-30" style={{ animationDuration: '8s' }} />
+          <div className="absolute inset-0 rounded-full overflow-hidden pointer-events-none">
+            <div className="absolute -inset-full bg-[conic-gradient(from_0deg,transparent,transparent_40%,var(--bento-green)_50%,transparent_60%,transparent)] animate-spin-slow opacity-30" style={{ animationDuration: '8s' }} />
           </div>
 
           <div className="relative px-4 md:px-6 py-3 flex items-center justify-between">

@@ -31,6 +31,7 @@ export async function getPublicProfile(username: string) {
                 image: user.image,
                 seoTitle: user.seoTitle,
                 seoDescription: user.seoDescription,
+                theme: user.theme,
             },
             blocks: user.blocks.map((b: any) => ({
                 ...b,

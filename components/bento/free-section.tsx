@@ -5,11 +5,16 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const names = [
-  "tito", "selim", "mary", "valerie", "mugeeb", "silvan", 
+  "tito", "selim", "mary", "valerie", "mugeeb", "silvan",
   "adeline", "dennis", "michele", "eike", "may-li", "clara"
 ]
 
+import { useLanguage } from "@/lib/language-context"
+
+// ... imports
+
 export function FreeSection() {
+  const { t } = useLanguage()
   const [currentName, setCurrentName] = useState(0)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
   const [direction, setDirection] = useState<"left" | "right">("right")
@@ -43,18 +48,18 @@ export function FreeSection() {
       <div className="text-center">
         {/* Main headline */}
         <h2 className="text-4xl md:text-6xl lg:text-7xl font-black text-foreground mb-4">
-          And the best part:
+          {t("media.free.part")}
         </h2>
         <h3 className="text-5xl md:text-7xl lg:text-8xl font-black mb-12 bg-clip-text text-transparent bg-gradient-to-r from-bento-green via-bento-blue to-bento-green animate-gradient">
-          {"It's free."}
+          {t("media.free.free")}
         </h3>
 
         {/* Unique link section */}
         <div className="mb-8">
           <p className="text-xl md:text-2xl text-muted-foreground mb-8">
-            Your unique link.
+            {t("media.free.link")}
             <br />
-            <span className="text-foreground">And btw, the good ones are still free.</span>
+            <span className="text-foreground">{t("media.free.btw")}</span>
           </p>
 
           {/* Animated URL display with slider controls */}
@@ -63,7 +68,7 @@ export function FreeSection() {
             <div className="relative group">
               {/* Glow effect */}
               <div className="absolute -inset-2 bg-gradient-to-r from-bento-green/30 via-bento-blue/30 to-bento-pink/30 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              
+
               <div className="relative flex items-center gap-2 bg-card border border-border rounded-2xl px-8 py-5 transition-all duration-500 hover:border-bento-green/50 hover:shadow-2xl hover:shadow-bento-green/20">
                 {/* Left arrow */}
                 <button
@@ -75,7 +80,7 @@ export function FreeSection() {
                 </button>
 
                 <span className="text-xl md:text-3xl font-bold text-muted-foreground">oneli.ne/</span>
-                
+
                 {/* Name slider */}
                 <div className="relative w-32 md:w-44 h-10 md:h-12 overflow-hidden">
                   {names.map((name, index) => (
@@ -83,8 +88,8 @@ export function FreeSection() {
                       key={name}
                       className={cn(
                         "absolute inset-0 flex items-center text-xl md:text-3xl font-bold text-bento-green transition-all duration-500",
-                        index === currentName 
-                          ? "opacity-100 translate-y-0" 
+                        index === currentName
+                          ? "opacity-100 translate-y-0"
                           : direction === "right"
                             ? index === (currentName - 1 + names.length) % names.length
                               ? "opacity-0 -translate-y-full"
@@ -134,7 +139,7 @@ export function FreeSection() {
           {/* Fade edges */}
           <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
           <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
-          
+
           <div className="flex animate-marquee whitespace-nowrap">
             {[...names, ...names, ...names].map((name, index) => (
               <span

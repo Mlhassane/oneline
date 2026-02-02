@@ -29,7 +29,7 @@ export async function syncUser() {
     return dbUser
 }
 
-export async function updateUserAction(id: string, data: { name?: string, username?: string, bio?: string, image?: string, seoTitle?: string, seoDescription?: string }) {
+export async function updateUserAction(id: string, data: { name?: string, username?: string, bio?: string, image?: string, seoTitle?: string, seoDescription?: string, theme?: string }) {
     try {
         // Check if username is taken by another user
         if (data.username) {

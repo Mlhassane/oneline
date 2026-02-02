@@ -365,8 +365,39 @@ function MobileDashboard() {
   )
 }
 
+import { useLanguage } from "@/lib/language-context"
+
+// ... imports
+
+// ... mockUser, mockCards, sidebarTools ... (unchanged)
+
+// ... BentoCard ... (unchanged)
+
+// ... DesktopDashboard ... (unchanged)
+
+// ... MobileDashboard ... (unchanged)
+
 export function DashboardShowcase() {
   const [activeView, setActiveView] = useState<"desktop" | "mobile">("desktop")
+  const { t } = useLanguage()
+
+  const features = [
+    {
+      title: t("media.dashboard.drag"),
+      description: t("media.dashboard.dragDesc"),
+      color: "bg-bento-green/10 border-bento-green/20 text-bento-green"
+    },
+    {
+      title: t("media.dashboard.realtime"),
+      description: t("media.dashboard.realtimeDesc"),
+      color: "bg-bento-blue/10 border-bento-blue/20 text-bento-blue"
+    },
+    {
+      title: t("media.dashboard.publish"),
+      description: t("media.dashboard.publishDesc"),
+      color: "bg-bento-pink/10 border-bento-pink/20 text-bento-pink"
+    },
+  ]
 
   return (
     <section className="px-4 py-24 max-w-7xl mx-auto">
@@ -374,13 +405,13 @@ export function DashboardShowcase() {
       <div className="text-center mb-12">
         <span className="inline-flex items-center gap-2 px-4 py-2 bg-bento-blue/10 border border-bento-blue/20 rounded-full text-sm font-medium text-bento-blue mb-6">
           <Grip className="w-4 h-4" />
-          Dashboard Preview
+          {t("media.dashboard.preview")}
         </span>
         <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-foreground mb-4">
-          Your creative space
+          {t("media.dashboard.title")}
         </h2>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Drag, drop, and customize. Build your perfect page in minutes with our intuitive dashboard.
+          {t("media.dashboard.desc")}
         </p>
       </div>
 
@@ -444,23 +475,7 @@ export function DashboardShowcase() {
 
       {/* Feature highlights */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
-        {[
-          {
-            title: "Drag & Drop",
-            description: "Intuitive editor to arrange your content exactly how you want it.",
-            color: "bg-bento-green/10 border-bento-green/20 text-bento-green"
-          },
-          {
-            title: "Real-time Preview",
-            description: "See changes instantly as you build your perfect page.",
-            color: "bg-bento-blue/10 border-bento-blue/20 text-bento-blue"
-          },
-          {
-            title: "One-click Publish",
-            description: "Go live in seconds. Share your page with the world.",
-            color: "bg-bento-pink/10 border-bento-pink/20 text-bento-pink"
-          },
-        ].map((feature) => (
+        {features.map((feature) => (
           <div
             key={feature.title}
             className={cn(

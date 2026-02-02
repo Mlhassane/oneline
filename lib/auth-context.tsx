@@ -13,6 +13,7 @@ export interface User {
   bio?: string
   seoTitle?: string
   seoDescription?: string
+  theme?: string
 }
 
 interface AuthContextType {
@@ -45,6 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               bio: synced.bio || undefined,
               seoTitle: synced.seoTitle || undefined,
               seoDescription: synced.seoDescription || undefined,
+              theme: synced.theme || undefined,
             })
           }
         } catch (error) {

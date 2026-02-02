@@ -3,13 +3,13 @@
 import React from "react"
 
 import { cn } from "@/lib/utils"
-import { 
-  Video, 
-  Headphones, 
-  Mail, 
-  Camera, 
-  ShoppingBag, 
-  Radio, 
+import {
+  Video,
+  Headphones,
+  Mail,
+  Camera,
+  ShoppingBag,
+  Radio,
   Calendar,
   Youtube,
   Instagram,
@@ -17,6 +17,8 @@ import {
   Music,
   Twitch
 } from "lucide-react"
+
+import { useLanguage } from "@/lib/language-context"
 
 const integrations = [
   { icon: Youtube, name: "YouTube", color: "bg-red-500" },
@@ -28,13 +30,13 @@ const integrations = [
 ]
 
 const contentTypes = [
-  { icon: Video, label: "Videos", color: "text-bento-pink" },
-  { icon: Headphones, label: "Podcasts", color: "text-bento-blue" },
-  { icon: Mail, label: "Newsletters", color: "text-bento-green" },
-  { icon: Camera, label: "Photos", color: "text-bento-orange" },
-  { icon: ShoppingBag, label: "Paid Products", color: "text-bento-yellow" },
-  { icon: Radio, label: "Streams", color: "text-bento-pink" },
-  { icon: Calendar, label: "Calendar", color: "text-bento-blue" },
+  { icon: Video, label: "videos", color: "text-bento-pink" },
+  { icon: Headphones, label: "podcasts", color: "text-bento-blue" },
+  { icon: Mail, label: "newsletters", color: "text-bento-green" },
+  { icon: Camera, label: "photos", color: "text-bento-orange" },
+  { icon: ShoppingBag, label: "paid", color: "text-bento-yellow" },
+  { icon: Radio, label: "streams", color: "text-bento-pink" },
+  { icon: Calendar, label: "calendar", color: "text-bento-blue" },
 ]
 
 interface BentoCardProps {
@@ -66,14 +68,16 @@ function BentoCard({ className, children, gradient, delay = 0 }: BentoCardProps)
 }
 
 export function BentoGrid() {
+  const { t } = useLanguage()
+
   return (
     <section className="px-4 py-20 max-w-7xl mx-auto">
       {/* Section header */}
       <div className="text-center mb-16">
         <h2 className="text-4xl md:text-6xl font-black text-foreground mb-4">
-          Your page.
+          {t("media.bento.page")}
           <br />
-          <span className="text-muted-foreground">Your content.</span>
+          <span className="text-muted-foreground">{t("media.bento.content")}</span>
         </h2>
       </div>
 
@@ -97,8 +101,8 @@ export function BentoGrid() {
               ))}
             </div>
             <div>
-              <h3 className="text-lg font-bold text-foreground group-hover:text-bento-green transition-colors">All your socials</h3>
-              <p className="text-sm text-muted-foreground">Connected in one place</p>
+              <h3 className="text-lg font-bold text-foreground group-hover:text-bento-green transition-colors">{t("media.bento.socials")}</h3>
+              <p className="text-sm text-muted-foreground">{t("media.bento.connected")}</p>
             </div>
           </div>
         </BentoCard>
@@ -108,7 +112,7 @@ export function BentoGrid() {
           <BentoCard key={item.label} className="col-span-1 border border-border hover:border-bento-green/50" delay={index * 100}>
             <div className="h-full flex flex-col justify-between">
               <item.icon className={cn("w-8 h-8 transition-all duration-300 group-hover:scale-110 group-hover:rotate-6", item.color)} />
-              <span className="text-sm font-medium text-foreground">{item.label}</span>
+              <span className="text-sm font-medium text-foreground">{t(`media.bento.${item.label}`)}</span>
             </div>
           </BentoCard>
         ))}
@@ -122,8 +126,8 @@ export function BentoGrid() {
               <div className="w-1/2 h-3 bg-foreground/10 rounded-full" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-foreground">Rich Previews</h3>
-              <p className="text-sm text-muted-foreground">No more hiding behind links</p>
+              <h3 className="text-lg font-bold text-foreground">{t("media.bento.rich")}</h3>
+              <p className="text-sm text-muted-foreground">{t("media.bento.noHiding")}</p>
             </div>
           </div>
         </BentoCard>
@@ -133,7 +137,7 @@ export function BentoGrid() {
           <BentoCard key={item.label} className="col-span-1 border border-border hover:border-bento-green/50" delay={(index + 2) * 100}>
             <div className="h-full flex flex-col justify-between">
               <item.icon className={cn("w-8 h-8 transition-all duration-300 group-hover:scale-110 group-hover:rotate-6", item.color)} />
-              <span className="text-sm font-medium text-foreground">{item.label}</span>
+              <span className="text-sm font-medium text-foreground">{t(`media.bento.${item.label}`)}</span>
             </div>
           </BentoCard>
         ))}
@@ -142,8 +146,8 @@ export function BentoGrid() {
         <BentoCard className="col-span-2 md:col-span-3 row-span-1 bg-gradient-to-r from-bento-blue/20 to-bento-green/20 border border-bento-blue/20">
           <div className="h-full flex items-center justify-between">
             <div>
-              <h3 className="text-lg font-bold text-foreground">Embed anything</h3>
-              <p className="text-sm text-muted-foreground">YouTube, Spotify, and more</p>
+              <h3 className="text-lg font-bold text-foreground">{t("media.bento.embed")}</h3>
+              <p className="text-sm text-muted-foreground">{t("media.bento.embedDesc")}</p>
             </div>
             <div className="flex gap-2">
               {integrations.slice(0, 3).map((item) => (

@@ -1,43 +1,43 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { Palette, Layout, Sparkles, Check } from "lucide-react"
-
-const themes = [
-    {
-        id: "modern",
-        name: "Modern Dark",
-        description: "The classic Onene look with deep grays and vibrant accents.",
-        colors: ["bg-[#0A0A0A]", "bg-bento-green", "bg-bento-blue"],
-        active: true
-    },
-    {
-        id: "minimal",
-        name: "Minimal Light",
-        description: "Clean, white and spacious. Perfect for professional portfolios.",
-        colors: ["bg-white", "bg-gray-200", "bg-gray-400"],
-        active: false
-    },
-    {
-        id: "midnight",
-        name: "Midnight Ocean",
-        description: "Deep blues and purples for a dreamy, high-end feel.",
-        colors: ["bg-[#020617]", "bg-indigo-500", "bg-purple-500"],
-        active: false
-    },
-    {
-        id: "emerald",
-        name: "Emerald Garden",
-        description: "Organic tones with sophisticated greens and beige.",
-        colors: ["bg-[#FBFAF8]", "bg-emerald-600", "bg-emerald-200"],
-        active: false
-    },
-]
+import { Palette, Layout, Sparkles, Check, Loader2 } from "lucide-react"
+import { useAuth } from "@/lib/auth-context"
+import { updateUserAction } from "@/lib/actions/user"
+import { themes } from "@/lib/themes"
+import { toast } from "sonner"
 
 export default function AppearancePage() {
+    const { user, updateUser } = useAuth()
     const [selectedTheme, setSelectedTheme] = useState("modern")
+    const [isSaving, setIsSaving] = useState(false)
+
+    useEffect(() => {
+        if (user?.theme) {
+            setSelectedTheme(user.theme)
+        }
+    }, [user?.theme])
+
+    const handleSave = async () => {
+        if (!user) return
+
+        setIsSaving(true)
+        try {
+            const result = await updateUserAction(user.id, { theme: selectedTheme })
+            if (result.success) {
+                updateUser({ theme: selectedTheme })
+                toast.success("Appearance updated")
+            } else {
+                toast.error(result.error || "Failed to update appearance")
+            }
+        } catch (error) {
+            toast.error("Something went wrong")
+        } finally {
+            setIsSaving(false)
+        }
+    }
 
     return (
         <div className="p-4 lg:p-8 min-h-full max-w-7xl mx-auto space-y-12">
@@ -154,7 +154,12 @@ export default function AppearancePage() {
             </div>
 
             <div className="pt-8 border-t border-border flex justify-end">
-                <Button className="rounded-2xl h-12 px-10 font-black bg-foreground text-background hover:scale-105 transition-all text-sm uppercase tracking-wider shadow-xl">
+                <Button
+                    onClick={handleSave}
+                    disabled={isSaving}
+                    className="rounded-2xl h-12 px-10 font-black bg-foreground text-background hover:scale-105 transition-all text-sm uppercase tracking-wider shadow-xl"
+                >
+                    {isSaving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
                     Apply Appearance
                 </Button>
             </div>
